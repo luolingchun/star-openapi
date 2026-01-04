@@ -1,0 +1,110 @@
+site_name: star-openapi
+site_url: https://luolingchun.github.io/star-openapi/
+site_description: A simple API framework based on Starlette.
+site_author: llc
+
+repo_url: https://github.com/luolingchun/star-openapi
+repo_name: "GitHub"
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: ⚓︎
+  - md_in_html
+  - pymdownx.magiclink
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - pymdownx.highlight:
+      linenums: true
+
+
+theme:
+  name: material
+  logo: images/logo-white.svg
+  favicon: images/logo-blue.svg
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-sunny
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-night
+  features:
+    - navigation.tracking
+    - navigation.footer
+    - navigation.top
+    #    - navigation.expand
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.action.edit
+    - content.action.view
+    - toc.follow
+
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_root_heading: true
+            show_root_full_path: false
+  - glightbox
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      reconfigure_material: true
+      reconfigure_search: true
+      languages:
+        - build: true
+          default: true
+          locale: en
+          name: English
+        - build: true
+          default: false
+          locale: zh
+          name: 简体中文
+          nav_translations:
+            API Reference: API 参考
+            Changelog: 更新日志
+            Contributing: 贡献
+            Example: 示例
+            Home: 简介
+            LICENSE: 许可
+            Model Config: 模型配置
+            Quickstart: 快速开始
+            Request: 请求
+            Response: 响应
+            Route Operation: 路由操作
+            Specification: 规范
+            UI Templates: 自定义模板
+            Configuration: 配置
+            Usage: 教程
+
+
+extra:
+  version:
+    provider: mike
+
+
+nav:
+  - Home: index.md
+  - Quickstart: Quickstart.md
+  - Usage:
+      - Specification: Usage/Specification.md
+      - Request: Usage/Request.md
+      - Route Operation: Usage/Route_Operation.md
+      - Configuration: Usage/Configuration.md
+      - UI Templates: Usage/UI_Templates.md
+  - Example: Example.md
+  - API Reference:
+      - OpenAPI: Reference/OpenAPI.md
+      - APIRouter: Reference/APIRouter.md
+      - Models: Reference/Models.md
+  - LICENSE: LICENSE.md
+  - Changelog: Changelog.md
+  - Contributing: Contributing.md

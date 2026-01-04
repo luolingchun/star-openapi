@@ -1,0 +1,120 @@
+[project]
+name = "star-openapi"
+dynamic = ["version"]
+description = "A simple API framework based on Starlette."
+maintainers = [{ name = "llc", email = "luolingchun@outlook.com" }]
+license = "MIT"
+license-files = ["LICENSE"]
+classifiers = [
+    # "Development Status :: 1 - Planning",
+    # "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 3 - Alpha",
+    # "Development Status :: 4 - Beta",
+    # "Development Status :: 5 - Production/Stable",
+    # "Development Status :: 6 - Mature",
+    # "Development Status :: 7 - Inactive",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+requires-python = ">=3.11"
+dependencies = [
+    "starlette>=0.50.0",
+    "pydantic>=2.0.0",
+    "jinja2>=3.1.2",
+    "uvicorn[standard]>=0.40.0",
+    "click>=8.0.0",
+    "cython>=3.2.3",
+    "setuptools>=80.9.0",
+]
+
+[project.optional-dependencies]
+full = [
+    "itsdangerous",
+    "python-multipart",
+    "pyyaml",
+    "httpx",
+]
+# ui templates
+swagger = ["star-openapi-swagger"]
+redoc = ["star-openapi-redoc"]
+rapidoc = ["star-openapi-rapidoc"]
+rapipdf = ["star-openapi-rapipdf"]
+scalar = ["star-openapi-scalar"]
+elements = ["star-openapi-elements"]
+
+
+[project.urls]
+Homepage = "https://github.com/luolingchun/star-openapi"
+Documentation = "https://luolingchun.github.io/star-openapi"
+
+[project.scripts]
+star = "star_openapi.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "star_openapi/__version__.py"
+
+[dependency-groups]
+mypy = ["mypy"]
+ruff = ["ruff"]
+test = ["pytest", "httpx"]
+doc = [
+    "mkdocs-static-i18n>=1.0",
+    "mkdocstrings[python]",
+    "mkdocs-material",
+    "mkdocs-glightbox",
+    "pyyaml",
+    "mike",
+]
+dev = [
+    "itsdangerous",
+    "python-multipart",
+    "pyyaml",
+    "httpx",
+    "star-openapi-swagger",
+    "star-openapi-redoc",
+    "star-openapi-rapidoc",
+    "star-openapi-rapipdf",
+    "star-openapi-scalar",
+    "star-openapi-elements"
+]
+
+[tool.uv]
+default-groups = "all"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "I", # Import related rules
+    "E4", # Import order
+    "E7", # Statement issues
+    "E9", # Runtime errors
+    "F", # Pyflakes rules
+    "Q", # flake8-quotes
+    "UP045", # Use X | None for type annotations
+]
+
+[tool.ruff.lint.per-file-ignores]
+"star_openapi/__init__.py" = ["F401"]
+"star_openapi/models/__init__.py" = ["F401"]
+
+[tool.mypy]
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["pydantic_core.*", "devtools.*"]
+follow_imports = "skip"
+ignore_missing_imports = true

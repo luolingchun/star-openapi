@@ -15,13 +15,14 @@ class TestModel(BaseModel):
     age: int
 
 
-@app.post("/book", summary="get books", tags=[book_tag])
-async def create_user(body: TestModel):
+@app.get("/book", summary="get books", tags=[book_tag])
+async def get_book(query: TestModel):
     """
     get all books
     """
-    print(body.model_dump_json())
+    print(query.model_dump_json())
     return JSONResponse({"message": "Hello World"})
+
 
 if __name__ == "__main__":
     print(app.routes)

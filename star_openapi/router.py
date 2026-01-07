@@ -62,7 +62,7 @@ class APIRouter(Router):
 
         self.paths.update(**api.paths)
 
-        # Update component schemas with the APIBlueprint's component schemas
+        # Update component schemas with the APIRouter's component schemas
         self.components_schemas.update(**api.components_schemas)
 
         # Register the APIRouter with the current instance

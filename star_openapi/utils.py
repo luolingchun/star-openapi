@@ -89,7 +89,7 @@ def get_operation_id_for_path(*, url_prefix: str = "", name: str = "", path: str
     Generate a unique operation ID based on the name, path, and method.
 
     Args:
-        url_prefix: The Blueprint name
+        url_prefix: The APIRouter name
         name: The name or identifier for the operation.
         path: The URL path for the operation.
         method: The HTTP method for the operation.

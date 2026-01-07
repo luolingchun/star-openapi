@@ -5,7 +5,7 @@
     </a>
 </div>
 <p align="center">
-    <em>A simple API framework based on Starlette.</em>
+    <em>A simple async API framework based on Starlette.</em>
 </p>
 <p align="center">
     <a href="https://github.com/luolingchun/star-openapi/actions/workflows/tests.yml" target="_blank">
@@ -35,6 +35,8 @@ The key features are:
   [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc), [RapiDoc](https://github.com/rapi-doc/RapiDoc), [RapiPdf](https://mrin9.github.io/RapiPdf/), [Scalar](https://github.com/scalar/scalar), [Elements](https://github.com/stoplightio/elements)
 
 - **Data validation:** Fast data verification based on [Pydantic](https://github.com/pydantic/pydantic)
+
+- **Websocket**: Support for websocket
 
 ## Requirements
 

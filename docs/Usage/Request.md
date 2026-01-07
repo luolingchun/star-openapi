@@ -77,6 +77,9 @@ Receive request headers.
 
 Receive request cookies.
 
+### request
+
+Receive request from **starlette.requests.Request**.
 
 ## Request model
 

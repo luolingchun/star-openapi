@@ -1,7 +1,8 @@
 [project]
 name = "star-openapi"
 dynamic = ["version"]
-description = "A simple API framework based on Starlette."
+description = "A simple async API framework based on Starlette."
+readme = "README.md"
 maintainers = [{ name = "llc", email = "luolingchun@outlook.com" }]
 license = "MIT"
 license-files = ["LICENSE"]
@@ -31,8 +32,6 @@ dependencies = [
     "jinja2>=3.1.2",
     "uvicorn[standard]>=0.40.0",
     "click>=8.0.0",
-    "cython>=3.2.3",
-    "setuptools>=80.9.0",
 ]
 
 [project.optional-dependencies]

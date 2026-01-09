@@ -5,11 +5,13 @@ from typing import Any
 from starlette.routing import Route, Router, WebSocketRoute
 
 from .endpoint import create_endpoint
-from .models import ExternalDocumentation, Server, Tag
-from .types import ParametersTuple
+from .models import ExternalDocumentation, RequestBody, Server, Tag
+from .types import ParametersTuple, ResponseDict
 from .utils import (
+    convert_responses_key_to_string,
     get_operation,
     get_operation_id_for_path,
+    get_responses,
     parse_and_store_tags,
     parse_method,
     parse_parameters,
@@ -25,6 +27,7 @@ class APIRouter(Router):
         tags: list[Tag | dict[str, Any]] | None = None,
         security: list[dict[str, list[str]]] | None = None,
         operation_id_callback: Callable = get_operation_id_for_path,
+        responses: ResponseDict | None = None,
         doc_ui: bool = True,
         **kwargs,
     ):
@@ -36,6 +39,7 @@ class APIRouter(Router):
             tags: APIRouter tags for every API.
             security: APIRouter security for every API.
             operation_id_callback: Callback function for custom operation_id generation.
+            responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             doc_ui: Enable OpenAPI document UI (Swagger UI, Redoc, etc.). Defaults to True.
             **kwargs: Starlette Router kwargs
         """
@@ -48,6 +52,7 @@ class APIRouter(Router):
         self.tag_names: list[str] = []
         self.security = security or []
         self.operation_id_callback = operation_id_callback
+        self.responses = convert_responses_key_to_string(responses or {})
         self.doc_ui = doc_ui
 
     def register_api(self, api: "APIRouter"):
@@ -60,7 +65,8 @@ class APIRouter(Router):
                 # Append tag name to the list of tag names
                 self.tag_names.append(tag.name)
 
-        self.paths.update(**api.paths)
+        prefixed_paths = {f"{self.url_prefix.rstrip('/')}{k}": v for k, v in api.paths.items()}
+        self.paths.update(**prefixed_paths)
 
         # Update component schemas with the APIRouter's component schemas
         self.components_schemas.update(**api.components_schemas)
@@ -93,10 +99,18 @@ class APIRouter(Router):
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server | dict[str, Any]] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body: RequestBody | dict[str, Any] | None = None,
+        responses: ResponseDict | None = None,
         doc_ui: bool = True,
         method: str = HTTPMethod.GET,
     ) -> ParametersTuple:
         if self.doc_ui and doc_ui:
+            # Convert key to string
+            endpoint_responses = convert_responses_key_to_string(responses or {})
+
+            # Global response: combine API responses
+            combine_responses = {**self.responses, **endpoint_responses}
+
             # Create operation
             operation = get_operation(
                 func,
@@ -131,14 +145,25 @@ class APIRouter(Router):
             tags = (tags or []) + self.tags
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
 
-            # Parse rule: merge url_prefix and format rule from /pet/<petId> to /pet/{petId}
+            # Parse rule: merge url_prefix
             uri = parse_rule(rule, url_prefix=self.url_prefix)
 
             # Parse method
             parse_method(uri, method, self.paths, operation)
 
+            if isinstance(request_body, dict):
+                request_body = RequestBody(**request_body)
+
+            # Parse response
+            get_responses(combine_responses, self.components_schemas, operation)
+
             # Parse parameters
-            return parse_parameters(func, components_schemas=self.components_schemas, operation=operation)
+            return parse_parameters(
+                func,
+                components_schemas=self.components_schemas,
+                operation=operation,
+                request_body=request_body,
+            )
         else:
             return parse_parameters(func, doc_ui=False)
 
@@ -156,6 +181,7 @@ class APIRouter(Router):
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server | dict[str, Any]] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        responses: ResponseDict | None = None,
         doc_ui: bool = True,
     ):
         def decorator(func) -> Callable:
@@ -171,6 +197,7 @@ class APIRouter(Router):
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                responses=responses,
                 doc_ui=doc_ui,
                 method=HTTPMethod.GET,
             )
@@ -195,6 +222,8 @@ class APIRouter(Router):
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server | dict[str, Any]] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body: RequestBody | dict[str, Any] | None = None,
+        responses: ResponseDict | None = None,
         doc_ui: bool = True,
     ):
         def decorator(func) -> Callable:
@@ -210,6 +239,8 @@ class APIRouter(Router):
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body=request_body,
+                responses=responses,
                 doc_ui=doc_ui,
                 method=HTTPMethod.POST,
             )
@@ -234,6 +265,8 @@ class APIRouter(Router):
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server | dict[str, Any]] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body: RequestBody | dict[str, Any] | None = None,
+        responses: ResponseDict | None = None,
         doc_ui: bool = True,
     ):
         def decorator(func) -> Callable:
@@ -249,6 +282,8 @@ class APIRouter(Router):
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body=request_body,
+                responses=responses,
                 doc_ui=doc_ui,
                 method=HTTPMethod.PUT,
             )
@@ -273,6 +308,8 @@ class APIRouter(Router):
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server | dict[str, Any]] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body: RequestBody | dict[str, Any] | None = None,
+        responses: ResponseDict | None = None,
         doc_ui: bool = True,
     ):
         def decorator(func) -> Callable:
@@ -288,6 +325,8 @@ class APIRouter(Router):
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body=request_body,
+                responses=responses,
                 doc_ui=doc_ui,
                 method=HTTPMethod.DELETE,
             )
@@ -312,6 +351,8 @@ class APIRouter(Router):
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server | dict[str, Any]] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body: RequestBody | dict[str, Any] | None = None,
+        responses: ResponseDict | None = None,
         doc_ui: bool = True,
     ):
         def decorator(func) -> Callable:
@@ -327,6 +368,8 @@ class APIRouter(Router):
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body=request_body,
+                responses=responses,
                 doc_ui=doc_ui,
                 method=HTTPMethod.PATCH,
             )

@@ -87,13 +87,13 @@ app = OpenAPI(info=info)
 book_tag = {"name": "book", "description": "book tag"}
 
 
-class TestModel(BaseModel):
+class BookModel(BaseModel):
     name: str
     age: int
 
 
 @app.post("/book", summary="get books", tags=[book_tag])
-async def create_user(body: TestModel):
+async def create_user(body: BookModel):
     """
     get all books
     """

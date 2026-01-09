@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Author  : llc
-# @Time    : 2023/2/16 9:46
-
-
 openapi_html_string = """
 <!DOCTYPE html>
 <html lang="en">

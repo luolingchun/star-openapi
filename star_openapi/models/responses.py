@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Author  : llc
-# @Time    : 2023/7/4 9:55
-
 from .reference import Reference
 from .response import Response
 

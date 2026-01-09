@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Author  : llc
-# @Time    : 2021/4/28 11:26
-
 from pydantic import BaseModel
 
 from .server_variable import ServerVariable

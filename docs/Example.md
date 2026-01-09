@@ -1,82 +1,63 @@
 ## Simple Demo
 
 ```python
+import uvicorn
 from pydantic import BaseModel
+from starlette.responses import JSONResponse
 
-from star_openapi import Info, Tag
 from star_openapi import OpenAPI
 
-info = Info(title="book API", version="1.0.0")
+info = {"title": "Star API", "version": "1.0.0"}
 app = OpenAPI(info=info)
 
-book_tag = Tag(name="book", description="Some Book")
+book_tag = {"name": "book", "description": "book tag"}
 
 
-class BookQuery(BaseModel):
+class BookModel(BaseModel):
+    name: str
     age: int
-    author: str
 
 
-@app.get("/book", tags=[book_tag])
-def get_book(query: BookQuery):
-    """get books
-    to get all books
+@app.get("/book", summary="get books", tags=[book_tag])
+async def get_book(query: BookModel):
     """
-    return {
-        "code": 0,
-        "message": "ok",
-        "data": [
-            {"bid": 1, "age": query.age, "author": query.author},
-            {"bid": 2, "age": query.age, "author": query.author}
-        ]
-    }
+    get all books
+    """
+    print(query.model_dump_json())
+    return JSONResponse({"message": "Hello World"})
 
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    print(app.routes)
+    uvicorn.run(app)
 ```
 
 ## REST Demo
 
 ```python
 from http import HTTPStatus
+
 from pydantic import BaseModel, Field
+from starlette.responses import JSONResponse
 
-from star_openapi import Info, Tag
-from star_openapi import OpenAPI
-
+from star_openapi import Info, OpenAPI, Tag
 
 info = Info(title="book API", version="1.0.0")
 # Basic Authentication Sample
-basic = {
-  "type": "http",
-  "scheme": "basic"
-}
+basic = {"type": "http", "scheme": "basic"}
 # JWT Bearer Sample
-jwt = {
-  "type": "http",
-  "scheme": "bearer",
-  "bearerFormat": "JWT"
-}
+jwt = {"type": "http", "scheme": "bearer", "bearerFormat": "JWT"}
 # API Key Sample
-api_key = {
-  "type": "apiKey",
-  "name": "api_key",
-  "in": "header"
-}
+api_key = {"type": "apiKey", "name": "api_key", "in": "header"}
 # Implicit OAuth2 Sample
 oauth2 = {
-  "type": "oauth2",
-  "flows": {
-    "implicit": {
-      "authorizationUrl": "https://example.com/api/oauth/dialog",
-      "scopes": {
-        "write:pets": "modify pets in your account",
-        "read:pets": "read your pets"
-      }
-    }
-  }
+    "type": "oauth2",
+    "flows": {
+        "implicit": {
+            "authorizationUrl": "https://example.com/api/oauth/dialog",
+            "scopes": {"write:pets": "modify pets in your account", "read:pets": "read your pets"},
+        }
+    },
 }
 security_schemes = {"jwt": jwt, "api_key": api_key, "oauth2": oauth2, "basic": basic}
 
@@ -86,17 +67,14 @@ class NotFoundResponse(BaseModel):
     message: str = Field("Resource not found!", description="Exception Information")
 
 
-app = OpenAPI(info=info, security_schemes=security_schemes, responses={404: NotFoundResponse})
+app = OpenAPI(info=info, security_schemes=security_schemes)
 
 book_tag = Tag(name="book", description="Some Book")
-security = [
-    {"jwt": []},
-    {"oauth2": ["write:pets", "read:pets"]}
-]
+security = [{"jwt": []}, {"oauth2": ["write:pets", "read:pets"]}]
 
 
 class BookPath(BaseModel):
-    bid: int = Field(..., description="book id")
+    id: int = Field(..., description="book id")
 
 
 class BookQuery(BaseModel):
@@ -106,11 +84,11 @@ class BookQuery(BaseModel):
 
 class BookBody(BaseModel):
     age: int | None = Field(..., ge=2, le=4, description="Age")
-    author: str = Field(None, min_length=2, max_length=4, description="Author")
+    author: str | None = Field(None, min_length=2, max_length=4, description="Author")
 
 
 class BookBodyWithID(BaseModel):
-    bid: int = Field(..., description="book id")
+    id: int = Field(..., description="book id")
     age: int | None = Field(None, ge=2, le=4, description="Age")
     author: str = Field(None, min_length=2, max_length=4, description="Author")
 
@@ -122,21 +100,20 @@ class BookResponse(BaseModel):
 
 
 @app.get(
-    "/book/{bid}",
+    "/book/{id}",
     tags=[book_tag],
     summary="new summary",
     description="new description",
-    responses={200: BookResponse, 201: {"content": {"text/csv": {"schema": {"type": "string"}}}}},
-    security=security
+    security=security,
 )
 async def get_book(path: BookPath):
     """Get a book
     to get some book by id, like:
     http://localhost:8000/book/3
     """
-    if path.bid == 4:
-        return NotFoundResponse().dict(), 404
-    return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": 3, "author": "no"}}
+    if path.id == 4:
+        return NotFoundResponse().model_dump_json(), 404
+    return JSONResponse({"code": 0, "message": "ok", "data": {"id": path.id, "age": 3, "author": "no"}})
 
 
 # set doc_ui False disable openapi UI
@@ -146,122 +123,110 @@ async def get_books(query: BookQuery):
     to get all books
     """
     print(query)
-    return {
-        "code": 0,
-        "message": "ok",
-        "data": [
-            {"bid": 1, "age": query.age, "author": "a1"},
-            {"bid": 2, "age": query.age, "author": "a2"}
-        ]
-    }
+    return JSONResponse(
+        {
+            "code": 0,
+            "message": "ok",
+            "data": [{"id": 1, "age": query.age, "author": "a1"}, {"id": 2, "age": query.age, "author": "a2"}],
+        }
+    )
 
 
-@app.post("/book", tags=[book_tag], responses={200: BookResponse})
+@app.post("/book", tags=[book_tag])
 async def create_book(body: BookBody):
     print(body)
-    return {"code": 0, "message": "ok"}, HTTPStatus.OK
+    return JSONResponse({"code": 0, "message": "ok"})
 
 
-@app.put("/book/{bid}", tags=[book_tag])
+@app.put("/book/{id}", tags=[book_tag])
 async def update_book(path: BookPath, body: BookBody):
     print(path)
     print(body)
-    return {"code": 0, "message": "ok"}
+    return JSONResponse({"code": 0, "message": "ok"})
 
 
-@app.delete("/book/{bid}", tags=[book_tag], doc_ui=False)
+@app.delete("/book/{id}", tags=[book_tag], doc_ui=False)
 async def delete_book(path: BookPath):
     print(path)
-    return {"code": 0, "message": "ok"}
+    return JSONResponse({"code": 0, "message": "ok"})
 
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+
+    uvicorn.run(app)
 ```
 
 ## APIRouter
 
 ```python
-from pydantic import BaseModel, Field
+import uvicorn
+from pydantic import BaseModel
+from starlette.responses import JSONResponse
 
-from star_openapi import APIRouter, OpenAPI
-from star_openapi import Tag, Info
+from star_openapi import OpenAPI
+from star_openapi.router import APIRouter
 
-info = Info(title="book API", version="1.0.0")
+app = OpenAPI()
 
-jwt = {
-    "type": "http",
-    "scheme": "bearer",
-    "bearerFormat": "JWT"
-}
-security_schemes = {"jwt": jwt}
-
-app = OpenAPI(info=info, security_schemes=security_schemes)
-
-tag = Tag(name="book", description="Some Book")
-security = [{"jwt": []}]
+api1 = APIRouter(url_prefix="/api1")
+api2 = APIRouter(url_prefix="/api2")
 
 
-class Unauthorized(BaseModel):
-    code: int = Field(-1, description="Status Code")
-    message: str = Field("Unauthorized!", description="Exception Information")
+class IdModel(BaseModel):
+    id: int
 
 
-api = APIRouter(
-    url_prefix="/api",
-    tags=[tag],
-    security=security,
-    responses={"401": Unauthorized},
-    # disable openapi UI
-    doc_ui=True
-)
+class BookModel(BaseModel):
+    name: str
+    age: int
 
 
-class BookBody(BaseModel):
-    age: int | None = Field(..., ge=2, le=4, description="Age")
-    author: str = Field(None, min_length=2, max_length=4, description="Author")
+@api1.get("/book")
+async def ge_book():
+    return JSONResponse({"message": "Hello World1"})
 
 
-class Path(BaseModel):
-    bid: int = Field(..., description="book id")
+@api1.post("/book")
+async def create_book(body: BookModel):
+    return JSONResponse(body.model_dump())
 
 
-@api.get("/book", doc_ui=False)
-async def get_book():
-    return {"code": 0, "message": "ok"}
+@api1.put("/book/{id}")
+async def update_book(path: IdModel, body: BookModel):
+    return JSONResponse({"id": path.id, "name": body.name, "age": body.age})
 
 
-@api.post("/book", responses={201: {"content": {"text/csv": {"schema": {"type": "string"}}}}})
-async def create_book(body: BookBody):
-    assert body.age == 3
-    return {"code": 0, "message": "ok"}
+@api1.delete("/book/{id}")
+async def delete_book(path: IdModel):
+    return JSONResponse({"id": path.id})
 
 
-@api.put("/book/{bid}")
-async def update_book(path: Path, body: BookBody):
-    assert path.bid == 1
-    assert body.age == 3
-    return {"code": 0, "message": "ok"}
+@api2.get("/")
+async def get_api2():
+    return JSONResponse({"message": "Hello World2"})
 
 
-# register api
-app.include_router(api)
+api1.register_api(api2)
+
+app.register_api(api1)
+app.register_api(api2)
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    print(app.routes)
+    uvicorn.run(app)
 ```
 
 ## Upload File Demo
 
 ```python
+import uvicorn
 from pydantic import BaseModel, Field
+from starlette.responses import JSONResponse
 
-from star_openapi import OpenAPI, Info
-from starlette.datastructures import UploadFile
+from star_openapi import OpenAPI, UploadFile
 
-app = OpenAPI(info=Info(title="upload API", version="1.0.0"))
+app = OpenAPI()
 
 
 class UploadFileForm(BaseModel):
@@ -269,17 +234,55 @@ class UploadFileForm(BaseModel):
     file_type: str = Field(None, description="File Type")
 
 
-@app.post("/upload")
+class UploadFilesForm(BaseModel):
+    files: list[UploadFile]
+    file_type: str = Field(None, description="File Type")
+
+
+@app.post("/upload/file")
 async def upload_file(form: UploadFileForm):
     print(form.file.filename)
     print(form.file_type)
-    form.file.save("test.jpg")
-    return {"code": 0, "message": "ok"}
+
+    content = await form.file.read()
+    with open(form.file.filename, "wb") as f:
+        f.write(content)
+    return JSONResponse({"code": 0, "message": "ok"})
+
+
+@app.post("/upload/files")
+async def upload_files(form: UploadFilesForm):
+    print(form.files)
+    print(form.file_type)
+    return JSONResponse({"code": 0, "message": "ok"})
 
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    print(app.routes)
+    uvicorn.run(app)
+```
+
+## Websocket Demo
+
+```python
+import uvicorn
+from starlette.websockets import WebSocket
+
+from star_openapi import OpenAPI
+
+app = OpenAPI()
+
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    while True:
+        data = await websocket.receive_text()
+        await websocket.send_text(data)
+
+
+if __name__ == "__main__":
+    uvicorn.run("websocket:app", reload=True)
 ```
 
 ## A complete project

@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Author  : llc
-# @Time    : 2021/4/28 10:58
-
 from pydantic import BaseModel
 
 from .contact import Contact

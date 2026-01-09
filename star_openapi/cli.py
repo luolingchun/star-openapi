@@ -438,7 +438,7 @@ def run_command(
     )
 
 
-def _load_app(app=None):
+def _load_app(app=None, verbose=False):
     if app is None:
         return None
 
@@ -449,9 +449,10 @@ def _load_app(app=None):
             sys.path.append(path)
         importlib.import_module(module)
     except Exception as e:
-        import traceback
+        if verbose:
+            import traceback
 
-        traceback.print_exc()
+            traceback.print_exc()
         click.secho(f"WARNING: Could not import module '{app}': {e}", fg="yellow", err=True)
 
     return app
@@ -462,33 +463,63 @@ class StarGroup(click.Group):
         super().__init__(*args, **kwargs)
         self._is_loaded_app = False
         self.app_option = click.Option(
-            ["--app"], default="asgi:app", envvar="UVICORN_APP", help="Application to run, like asgi:app."
+            ["-a", "--app"], default="asgi:app", envvar="UVICORN_APP", help="Application to run, like asgi:app."
         )
-        self.params.append(self.app_option)
+        self.verbose_option = click.Option(
+            ["-v", "--verbose"], is_flag=True, default=False, help="Enable verbose mode."
+        )
+        self.params.extend([self.app_option, self.verbose_option])
+
+    def _ensure_app_loaded(self, ctx):
+        if self._is_loaded_app:
+            return
+
+        verbose = ctx.params.get("verbose", False)
+        app_path = ctx.params.get("app", "asgi:app")
+
+        ctx.obj = ctx.obj or {}
+        ctx.obj["app"] = _load_app(app_path, verbose=verbose)
+        self._is_loaded_app = True
 
     def parse_args(self, ctx: click.Context, args: list[str]) -> list[str]:
-        self._is_loaded_app = False
-        if "--app" not in args:
-            self.app_option.handle_parse_result(ctx, {}, [])
-        else:
-            ctx.params["app"] = args[args.index("--app") + 1]
-        ctx.obj = ctx.obj or {}
-        ctx.obj["app"] = _load_app(ctx.params["app"])
-        self._is_loaded_app = True
+        ctx.params["verbose"] = "-v" in args or "--verbose" in args
+        remaining_args = []
+        skip_next = False
+        for i, arg in enumerate(args):
+            if skip_next:
+                skip_next = False
+                continue
+            if arg in ("-a", "--app"):
+                skip_next = True
+                continue
+            if arg in ("-v", "--verbose"):
+                continue
+            remaining_args.append(arg)
+
+        if "--app" in args:
+            idx = args.index("--app")
+            if len(args) > idx + 1:
+                ctx.params["app"] = args[idx + 1]
+        elif "-a" in args:
+            idx = args.index("-a")
+            if len(args) > idx + 1:
+                ctx.params["app"] = args[idx + 1]
+
+        self._ensure_app_loaded(ctx)
+
+        if not remaining_args and args:
+            click.echo(ctx.get_help())
+            ctx.exit()
 
         return super().parse_args(ctx, args)
 
     def invoke(self, ctx: Context):
-        if not self._is_loaded_app and "app" in ctx.params:
-            ctx.obj = ctx.obj or {}
-            ctx.obj["app"] = _load_app(ctx.params["app"])
+        self._ensure_app_loaded(ctx)
 
         return super().invoke(ctx)
 
     def get_help(self, ctx: Context) -> str:
-        if not self._is_loaded_app and "app" in ctx.params:
-            ctx.obj = ctx.obj or {}
-            ctx.obj["app"] = _load_app(ctx.params["app"])
+        self._ensure_app_loaded(ctx)
         return super().get_help(ctx)
 
 

@@ -38,13 +38,13 @@ You need to add docs to the view-func. The first line is the **summary**, and th
 this:
 
 ```python hl_lines="3 4 5 6"
-@app.get('/book/{bid}', tags=[book_tag], responses={200: BookResponse}, security=security)
+@app.get('/book/{id}', tags=[book_tag], responses={200: BookResponse}, security=security)
 async def get_book(path: BookPath, query: BookBody):
     """Get book
     Get some book by id, like:
     http://localhost:8000/book/3
     """
-    return {"code": 0, "message": "ok", "data": {"bid": path.bid, "age": query.age, "author": query.author}}
+    return {"code": 0, "message": "ok", "data": {"id": path.id, "age": query.age, "author": query.author}}
 ```
 
 ![image-20210605115557426](../assets/image-20210605115557426.png)
@@ -52,7 +52,7 @@ async def get_book(path: BookPath, query: BookBody):
 Now keyword parameters `summary` and `description` is supported, it will be take first.
 
 ```python hl_lines="1"
-@app.get('/book/<int:bid>', summary="new summary", description='new description')
+@app.get('/book/{id}', summary="new summary", description='new description')
 def get_book(path: BookPath, query: BookBody):
     """Get book
     Get some book by id, like:
@@ -75,8 +75,9 @@ from star_openapi import OpenAPI, ExternalDocumentation
 
 app = OpenAPI(info=info)
 
+
 @app.get(
-    '/book/{bid}',
+    '/book/{id}',
     tags=[book_tag],
     summary='new summary',
     description='new description',
@@ -94,7 +95,7 @@ You can set `operation_id` for an api (operation). The default is automatically.
 
 ```python hl_lines="6"
 @app.get(
-    '/book/{bid}',
+    '/book/{id}',
     tags=[book_tag],
     summary='new summary',
     description='new description',
@@ -136,7 +137,7 @@ async def get_books(query: BookQuery):
 pass the **security** to your api, like this:
 
 ```python hl_lines="1"
-@app.get('/book/{bid}', tags=[book_tag], security=security)
+@app.get('/book/{id}', tags=[book_tag], security=security)
 async def get_book(path: Path, query: BookBody):
     ...
 ```
@@ -146,33 +147,33 @@ There are many kinds of security supported here:
 ```python
 # Basic Authentication Sample
 basic = {
-  "type": "http",
-  "scheme": "basic"
+    "type": "http",
+    "scheme": "basic"
 }
 # JWT Bearer Sample
 jwt = {
-  "type": "http",
-  "scheme": "bearer",
-  "bearerFormat": "JWT"
+    "type": "http",
+    "scheme": "bearer",
+    "bearerFormat": "JWT"
 }
 # API Key Sample
 api_key = {
-  "type": "apiKey",
-  "name": "api_key",
-  "in": "header"
+    "type": "apiKey",
+    "name": "api_key",
+    "in": "header"
 }
 # Implicit OAuth2 Sample
 oauth2 = {
-  "type": "oauth2",
-  "flows": {
-    "implicit": {
-      "authorizationUrl": "https://example.com/api/oauth/dialog",
-      "scopes": {
-        "write:pets": "modify pets in your account",
-        "read:pets": "read your pets"
-      }
+    "type": "oauth2",
+    "flows": {
+        "implicit": {
+            "authorizationUrl": "https://example.com/api/oauth/dialog",
+            "scopes": {
+                "write:pets": "modify pets in your account",
+                "read:pets": "read your pets"
+            }
+        }
     }
-  }
 }
 security_schemes = {"jwt": jwt, "api_key": api_key, "oauth2": oauth2, "basic": basic}
 
@@ -184,8 +185,9 @@ security = [
     {"basic": []}
 ]
 
+
 @app.get(
-    '/book/{bid}',
+    '/book/{id}',
     tags=[book_tag],
     summary='new summary',
     description='new description',
@@ -220,8 +222,9 @@ from star_openapi import OpenAPI, Server
 
 app = OpenAPI(info=info)
 
+
 @app.get(
-    '/book/{bid}',
+    '/book/{id}',
     tags=[book_tag],
     summary='new summary',
     description='new description',
@@ -255,6 +258,7 @@ openapi_extensions = {
         "protocol": "h2"
     }
 }
+
 
 @app.get("/", openapi_extensions=openapi_extensions)
 async def hello():

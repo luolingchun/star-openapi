@@ -10,15 +10,17 @@ from starlette.applications import Starlette
 from starlette.responses import HTMLResponse, JSONResponse
 from starlette.routing import Mount, Route, WebSocketRoute
 
-from . import Components, Schema
 from .cli import cli
 from .config import Config
 from .endpoint import create_endpoint
 from .models import (
     OPENAPI3_REF_PREFIX,
+    Components,
     ExternalDocumentation,
     Info,
     OpenAPISpec,
+    RequestBody,
+    Schema,
     SecurityScheme,
     Server,
     Tag,
@@ -26,12 +28,14 @@ from .models import (
 )
 from .router import APIRouter
 from .templates import openapi_html_string
-from .types import ParametersTuple
+from .types import ParametersTuple, ResponseDict
 from .utils import (
     HTTP_STATUS,
+    convert_responses_key_to_string,
     get_model_schema,
     get_operation,
     get_operation_id_for_path,
+    get_responses,
     make_validation_error_response,
     parse_and_store_tags,
     parse_method,
@@ -52,6 +56,7 @@ class OpenAPI(Starlette):
         validation_error_status: str | int = 422,
         validation_error_model: Type[BaseModel] = ValidationErrorModel,
         validation_error_callback: Callable = make_validation_error_response,
+        responses: ResponseDict | None = None,
         doc_ui: bool = True,
         doc_prefix: str = "/openapi",
         doc_url: str = "/openapi.json",
@@ -79,6 +84,7 @@ class OpenAPI(Starlette):
             validation_error_model: Validation error response model for OpenAPI Specification.
             validation_error_callback: Validation error response callback, the return format corresponds to
                 the validation_error_model.
+            responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             doc_ui: Enable OpenAPI document UI (Swagger UI and Redoc).
                 Defaults to True.
             doc_prefix: URL prefix used for OpenAPI document and UI.
@@ -125,6 +131,9 @@ class OpenAPI(Starlette):
         self.validation_error_status = str(validation_error_status)
         self.validation_error_model = validation_error_model
         self.add_exception_handler(ValidationError, validation_error_callback)
+
+        # Convert responses key to string
+        self.responses = convert_responses_key_to_string(responses or {})
 
         # Initialize the OpenAPI documentation UI
         if doc_ui:
@@ -285,10 +294,18 @@ class OpenAPI(Starlette):
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server | dict[str, Any]] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body: RequestBody | dict[str, Any] | None = None,
+        responses: ResponseDict | None = None,
         doc_ui: bool = True,
         method: str = HTTPMethod.GET,
     ) -> ParametersTuple:
         if doc_ui:
+            # Convert key to string
+            endpoint_responses = convert_responses_key_to_string(responses or {})
+
+            # Global response: combine API responses
+            combine_responses = {**self.responses, **endpoint_responses}
+
             # Create operation
             operation = get_operation(
                 func,
@@ -323,8 +340,19 @@ class OpenAPI(Starlette):
             # Parse method
             parse_method(rule, method, self.paths, operation)
 
+            if isinstance(request_body, dict):
+                request_body = RequestBody(**request_body)
+
+            # Parse response
+            get_responses(combine_responses, self.components_schemas, operation)
+
             # Parse parameters
-            return parse_parameters(func, components_schemas=self.components_schemas, operation=operation)
+            return parse_parameters(
+                func,
+                components_schemas=self.components_schemas,
+                operation=operation,
+                request_body=request_body,
+            )
         else:
             return parse_parameters(func, doc_ui=False)
 
@@ -342,6 +370,7 @@ class OpenAPI(Starlette):
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server | dict[str, Any]] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        responses: ResponseDict | None = None,
         doc_ui: bool = True,
     ):
         def decorator(func) -> Callable:
@@ -357,6 +386,7 @@ class OpenAPI(Starlette):
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                responses=responses,
                 doc_ui=doc_ui,
                 method=HTTPMethod.GET,
             )
@@ -381,6 +411,8 @@ class OpenAPI(Starlette):
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server | dict[str, Any]] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body: RequestBody | dict[str, Any] | None = None,
+        responses: ResponseDict | None = None,
         doc_ui: bool = True,
     ):
         def decorator(func) -> Callable:
@@ -396,6 +428,8 @@ class OpenAPI(Starlette):
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body=request_body,
+                responses=responses,
                 doc_ui=doc_ui,
                 method=HTTPMethod.POST,
             )
@@ -420,6 +454,8 @@ class OpenAPI(Starlette):
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server | dict[str, Any]] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body: RequestBody | dict[str, Any] | None = None,
+        responses: ResponseDict | None = None,
         doc_ui: bool = True,
     ):
         def decorator(func) -> Callable:
@@ -435,6 +471,8 @@ class OpenAPI(Starlette):
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body=request_body,
+                responses=responses,
                 doc_ui=doc_ui,
                 method=HTTPMethod.PUT,
             )
@@ -459,6 +497,8 @@ class OpenAPI(Starlette):
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server | dict[str, Any]] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body: RequestBody | dict[str, Any] | None = None,
+        responses: ResponseDict | None = None,
         doc_ui: bool = True,
     ):
         def decorator(func) -> Callable:
@@ -474,6 +514,8 @@ class OpenAPI(Starlette):
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body=request_body,
+                responses=responses,
                 doc_ui=doc_ui,
                 method=HTTPMethod.DELETE,
             )
@@ -498,6 +540,8 @@ class OpenAPI(Starlette):
         security: list[dict[str, list[Any]]] | None = None,
         servers: list[Server | dict[str, Any]] | None = None,
         openapi_extensions: dict[str, Any] | None = None,
+        request_body: RequestBody | dict[str, Any] | None = None,
+        responses: ResponseDict | None = None,
         doc_ui: bool = True,
     ):
         def decorator(func) -> Callable:
@@ -513,6 +557,8 @@ class OpenAPI(Starlette):
                 security=security,
                 servers=servers,
                 openapi_extensions=openapi_extensions,
+                request_body=request_body,
+                responses=responses,
                 doc_ui=doc_ui,
                 method=HTTPMethod.PATCH,
             )

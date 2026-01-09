@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Author  : llc
-# @Time    : 2023/7/4 9:54
-
 from pydantic import BaseModel
 
 from .header import Header

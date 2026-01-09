@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Author  : llc
-# @Time    : 2021/5/10 14:51
 from typing import Any
 
 from pydantic import BaseModel, Field

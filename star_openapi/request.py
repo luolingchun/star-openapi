@@ -108,7 +108,7 @@ async def _validate_form(request: Request, form: Type[BaseModel]):
         model_field_schema = model_properties.get(model_field_value.alias or model_field_key)
         if model_field_schema.get("type") == "array":
             if model_field_schema.get("items") == {"format": "binary", "type": "string"}:
-                # list[FileStorage]
+                # list[UploadFile]
                 key, value = _get_list_value(form, request_form, model_field_key, model_field_value)
             else:
                 value = []
@@ -119,7 +119,7 @@ async def _validate_form(request: Request, form: Type[BaseModel]):
                     except (JSONDecodeError, TypeError):
                         value.append(_value)
         elif model_field_schema.get("type") == "string" and model_field_schema.get("format") == "binary":
-            # FileStorage
+            # UploadFile
             key, value = _get_value(form, request_form, model_field_key, model_field_value)
         else:
             key, _value = _get_value(form, request_form, model_field_key, model_field_value)

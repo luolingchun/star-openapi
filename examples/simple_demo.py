@@ -10,13 +10,13 @@ app = OpenAPI(info=info)
 book_tag = {"name": "book", "description": "book tag"}
 
 
-class TestModel(BaseModel):
+class BookModel(BaseModel):
     name: str
     age: int
 
 
 @app.get("/book", summary="get books", tags=[book_tag])
-async def get_book(query: TestModel):
+async def get_book(query: BookModel):
     """
     get all books
     """

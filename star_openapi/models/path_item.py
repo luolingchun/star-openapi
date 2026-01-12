@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Author  : llc
-# @Time    : 2023/7/4 9:50
 import typing
 from typing import Optional
 

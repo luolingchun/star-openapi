@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Author  : llc
-# @Time    : 2023/7/4 9:44
-
 from .parameter import Parameter
 from .parameter_in_type import ParameterInType
 

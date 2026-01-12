@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Author  : llc
-# @Time    : 2021/5/1 21:34
-
 import inspect
 import json
 import re
@@ -23,10 +19,11 @@ from .models import (
     ParameterInType,
     PathItem,
     RequestBody,
+    Response,
     Schema,
     Tag,
 )
-from .types import ParametersTuple
+from .types import ParametersTuple, ResponseDict, ResponseStrKeyDict
 
 HTTP_STATUS = {str(status.value): status.phrase for status in HTTPStatus}
 
@@ -329,29 +326,48 @@ def parse_and_store_tags(
     operation.tags = list(set(new_tag_names)) or ["default"]
 
 
+def get_responses(responses: ResponseStrKeyDict, components_schemas: dict, operation: Operation) -> None:
+    _responses = {}
+    _schemas = {}
+
+    for key, response in responses.items():
+        if response is None:
+            # If the response is None, it means HTTP status code "204" (No Content)
+            _responses[key] = Response(description=HTTP_STATUS.get(key, ""))
+        elif isinstance(response, dict):
+            response["description"] = response.get("description", HTTP_STATUS.get(key, ""))
+            _responses[key] = Response(**response)
+        elif isinstance(response, Response):
+            _responses[key] = response
+        else:
+            # OpenAPI 3 support ^[a-zA-Z0-9\.\-_]+$ so we should normalize __name__
+            schema = get_model_schema(response, mode="serialization")
+            original_title = schema.get("title") or response.__name__
+            name = normalize_name(original_title)
+            _responses[key] = Response(
+                description=HTTP_STATUS.get(key, ""),
+                content={"application/json": MediaType(schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{name}"}))},
+            )
+
+            _schemas[name] = Schema(**schema)
+            definitions = schema.get("$defs")
+            if definitions:
+                # Add schema definitions to _schemas
+                for name, value in definitions.items():
+                    _schemas[normalize_name(name)] = Schema(**value)
+
+    components_schemas.update(**_schemas)
+    operation.responses = _responses
+
+
 def parse_parameters(
     func: Callable,
     *,
     components_schemas: dict | None = None,
     operation: Operation | None = None,
+    request_body: RequestBody | None = None,
     doc_ui: bool = True,
 ) -> ParametersTuple:
-    """
-    Parses the parameters of a given function and returns the types for header, cookie, path,
-    query, form, and body parameters. Also populates the Operation object with the parsed parameters.
-
-    Args:
-        func: The function to parse the parameters from.
-        components_schemas: Dictionary to store the parsed components schemas (default: None).
-        operation: Operation object to populate with parsed parameters (default: None).
-        doc_ui: Flag indicating whether to return types for documentation UI (default: True).
-
-    Returns:
-        tuple[Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel], Type[BaseModel]]:
-        The types for header, cookie, path, query, form, and body parameters respectively.
-
-    """
-
     # If components_schemas is None, initialize it as an empty dictionary
     if components_schemas is None:
         components_schemas = dict()
@@ -376,6 +392,7 @@ def parse_parameters(
         return header, cookie, path, query, form, body
 
     parameters = []
+    _request_body = None
 
     if header:
         _parameters, _components_schemas = parse_header(header)
@@ -400,18 +417,18 @@ def parse_parameters(
     if form:
         _content, _components_schemas = parse_form(form)
         components_schemas.update(**_components_schemas)
-        request_body = RequestBody(content=_content, required=True)
-        operation.requestBody = request_body
+        _request_body = RequestBody(content=_content, required=True)
 
     if body:
         _content, _components_schemas = parse_body(body)
         components_schemas.update(**_components_schemas)
-        request_body = RequestBody(content=_content, required=True)
-        operation.requestBody = request_body
+        _request_body = RequestBody(content=_content, required=True)
 
     if parameters:
         # Set the parsed parameters in the operation object
         operation.parameters = parameters
+
+    operation.requestBody = request_body or _request_body
 
     return header, cookie, path, query, form, body
 
@@ -470,10 +487,13 @@ def parse_rule(rule: str, url_prefix=None) -> str:
     if not trail_slash:
         uri = uri.rstrip("/")
 
-    # Convert a route parameter format from /pet/<petId> to /pet/{petId}
-    uri = re.sub(r"<([^<:]+:)?", "{", uri).replace(">", "}")
-
     return uri
+
+
+def convert_responses_key_to_string(responses: ResponseDict) -> ResponseStrKeyDict:
+    """Convert key to string"""
+
+    return {str(key.value if isinstance(key, HTTPStatus) else key): value for key, value in responses.items()}
 
 
 def normalize_name(name: str) -> str:

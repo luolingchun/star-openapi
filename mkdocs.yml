@@ -82,6 +82,7 @@ plugins:
             Route Operation: 路由操作
             Specification: 规范
             UI Templates: 自定义模板
+            CLI: 命令行
             Configuration: 配置
             Usage: 教程
 
@@ -97,9 +98,11 @@ nav:
   - Usage:
       - Specification: Usage/Specification.md
       - Request: Usage/Request.md
+      - Response: Usage/Response.md
       - Route Operation: Usage/Route_Operation.md
       - Configuration: Usage/Configuration.md
       - UI Templates: Usage/UI_Templates.md
+      - CLI: Usage/CLI.md
   - Example: Example.md
   - API Reference:
       - OpenAPI: Reference/OpenAPI.md

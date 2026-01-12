@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-# @Author  : llc
-# @Time    : 2021/5/11 16:17
 from typing import Any
 
 from pydantic.json_schema import JsonSchemaValue

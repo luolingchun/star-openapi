@@ -12,7 +12,7 @@
         <link rel="canonical" href="https://luolingchun.github.io/star-openapi/v0.x/zh/Example/">
       
       
-        <link rel="prev" href="../Usage/UI_Templates/">
+        <link rel="prev" href="../Usage/CLI/">
       
       
         <link rel="next" href="../Reference/OpenAPI/">
@@ -469,6 +469,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../Usage/Response/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    响应
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../Usage/Route_Operation/" class="md-nav__link">
         
   
@@ -533,6 +561,34 @@
     
   
     自定义模板
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Usage/CLI/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    命令行
   
 
     
@@ -653,6 +709,17 @@
     <span class="md-ellipsis">
       
         Upload File Demo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#websocket-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Websocket Demo
       
     </span>
   </a>
@@ -966,6 +1033,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#websocket-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Websocket Demo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#a-complete-project" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1040,45 +1118,35 @@
 <span class="normal">26</span>
 <span class="normal">27</span>
 <span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span>
-<span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="normal">29</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">starlette.responses</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONResponse</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">star_openapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Info</span><span class="p">,</span> <span class="n">Tag</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">star_openapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPI</span>
 
-<span class="n">info</span> <span class="o">=</span> <span class="n">Info</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"book API"</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">"1.0.0"</span><span class="p">)</span>
+<span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Star API"</span><span class="p">,</span> <span class="s2">"version"</span><span class="p">:</span> <span class="s2">"1.0.0"</span><span class="p">}</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="n">info</span><span class="o">=</span><span class="n">info</span><span class="p">)</span>
 
-<span class="n">book_tag</span> <span class="o">=</span> <span class="n">Tag</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"book"</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Some Book"</span><span class="p">)</span>
+<span class="n">book_tag</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"book"</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"book tag"</span><span class="p">}</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">BookQuery</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BookModel</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">age</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">author</span><span class="p">:</span> <span class="nb">str</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/book"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">book_tag</span><span class="p">])</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="n">BookQuery</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""get books</span>
-<span class="sd">    to get all books</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/book"</span><span class="p">,</span> <span class="n">summary</span><span class="o">=</span><span class="s2">"get books"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">book_tag</span><span class="p">])</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">(</span><span class="n">query</span><span class="p">:</span> <span class="n">BookModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    get all books</span>
 <span class="sd">    """</span>
-    <span class="k">return</span> <span class="p">{</span>
-        <span class="s2">"code"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">,</span>
-        <span class="s2">"data"</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">{</span><span class="s2">"bid"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="n">query</span><span class="o">.</span><span class="n">age</span><span class="p">,</span> <span class="s2">"author"</span><span class="p">:</span> <span class="n">query</span><span class="o">.</span><span class="n">author</span><span class="p">},</span>
-            <span class="p">{</span><span class="s2">"bid"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="n">query</span><span class="o">.</span><span class="n">age</span><span class="p">,</span> <span class="s2">"author"</span><span class="p">:</span> <span class="n">query</span><span class="o">.</span><span class="n">author</span><span class="p">}</span>
-        <span class="p">]</span>
-    <span class="p">}</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">({</span><span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Hello World"</span><span class="p">})</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
-    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">"127.0.0.1"</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8000</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">routes</span><span class="p">)</span>
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
 </code></pre></div></td></tr></tbody></table></div>
 <h2 id="rest-demo">REST Demo<a class="headerlink" href="#rest-demo" title="Permanent link">⚓︎</a></h2>
 <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">  1</span>
@@ -1200,61 +1268,29 @@
 <span class="normal">117</span>
 <span class="normal">118</span>
 <span class="normal">119</span>
-<span class="normal">120</span>
-<span class="normal">121</span>
-<span class="normal">122</span>
-<span class="normal">123</span>
-<span class="normal">124</span>
-<span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span>
-<span class="normal">128</span>
-<span class="normal">129</span>
-<span class="normal">130</span>
-<span class="normal">131</span>
-<span class="normal">132</span>
-<span class="normal">133</span>
-<span class="normal">134</span>
-<span class="normal">135</span>
-<span class="normal">136</span>
-<span class="normal">137</span>
-<span class="normal">138</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">http</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPStatus</span>
+<span class="normal">120</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">http</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPStatus</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">starlette.responses</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONResponse</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">star_openapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Info</span><span class="p">,</span> <span class="n">Tag</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">star_openapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPI</span>
-
+<span class="kn">from</span><span class="w"> </span><span class="nn">star_openapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Info</span><span class="p">,</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">Tag</span>
 
 <span class="n">info</span> <span class="o">=</span> <span class="n">Info</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"book API"</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">"1.0.0"</span><span class="p">)</span>
 <span class="c1"># Basic Authentication Sample</span>
-<span class="n">basic</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"http"</span><span class="p">,</span>
-  <span class="s2">"scheme"</span><span class="p">:</span> <span class="s2">"basic"</span>
-<span class="p">}</span>
+<span class="n">basic</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"http"</span><span class="p">,</span> <span class="s2">"scheme"</span><span class="p">:</span> <span class="s2">"basic"</span><span class="p">}</span>
 <span class="c1"># JWT Bearer Sample</span>
-<span class="n">jwt</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"http"</span><span class="p">,</span>
-  <span class="s2">"scheme"</span><span class="p">:</span> <span class="s2">"bearer"</span><span class="p">,</span>
-  <span class="s2">"bearerFormat"</span><span class="p">:</span> <span class="s2">"JWT"</span>
-<span class="p">}</span>
+<span class="n">jwt</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"http"</span><span class="p">,</span> <span class="s2">"scheme"</span><span class="p">:</span> <span class="s2">"bearer"</span><span class="p">,</span> <span class="s2">"bearerFormat"</span><span class="p">:</span> <span class="s2">"JWT"</span><span class="p">}</span>
 <span class="c1"># API Key Sample</span>
-<span class="n">api_key</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"apiKey"</span><span class="p">,</span>
-  <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"api_key"</span><span class="p">,</span>
-  <span class="s2">"in"</span><span class="p">:</span> <span class="s2">"header"</span>
-<span class="p">}</span>
+<span class="n">api_key</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"apiKey"</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"api_key"</span><span class="p">,</span> <span class="s2">"in"</span><span class="p">:</span> <span class="s2">"header"</span><span class="p">}</span>
 <span class="c1"># Implicit OAuth2 Sample</span>
 <span class="n">oauth2</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"oauth2"</span><span class="p">,</span>
-  <span class="s2">"flows"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">"implicit"</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">"authorizationUrl"</span><span class="p">:</span> <span class="s2">"https://example.com/api/oauth/dialog"</span><span class="p">,</span>
-      <span class="s2">"scopes"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">"write:pets"</span><span class="p">:</span> <span class="s2">"modify pets in your account"</span><span class="p">,</span>
-        <span class="s2">"read:pets"</span><span class="p">:</span> <span class="s2">"read your pets"</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"oauth2"</span><span class="p">,</span>
+    <span class="s2">"flows"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"implicit"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"authorizationUrl"</span><span class="p">:</span> <span class="s2">"https://example.com/api/oauth/dialog"</span><span class="p">,</span>
+            <span class="s2">"scopes"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"write:pets"</span><span class="p">:</span> <span class="s2">"modify pets in your account"</span><span class="p">,</span> <span class="s2">"read:pets"</span><span class="p">:</span> <span class="s2">"read your pets"</span><span class="p">},</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
 <span class="p">}</span>
 <span class="n">security_schemes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"jwt"</span><span class="p">:</span> <span class="n">jwt</span><span class="p">,</span> <span class="s2">"api_key"</span><span class="p">:</span> <span class="n">api_key</span><span class="p">,</span> <span class="s2">"oauth2"</span><span class="p">:</span> <span class="n">oauth2</span><span class="p">,</span> <span class="s2">"basic"</span><span class="p">:</span> <span class="n">basic</span><span class="p">}</span>
 
@@ -1264,17 +1300,14 @@
     <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="s2">"Resource not found!"</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Exception Information"</span><span class="p">)</span>
 
 
-<span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="n">info</span><span class="o">=</span><span class="n">info</span><span class="p">,</span> <span class="n">security_schemes</span><span class="o">=</span><span class="n">security_schemes</span><span class="p">,</span> <span class="n">responses</span><span class="o">=</span><span class="p">{</span><span class="mi">404</span><span class="p">:</span> <span class="n">NotFoundResponse</span><span class="p">})</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="n">info</span><span class="o">=</span><span class="n">info</span><span class="p">,</span> <span class="n">security_schemes</span><span class="o">=</span><span class="n">security_schemes</span><span class="p">)</span>
 
 <span class="n">book_tag</span> <span class="o">=</span> <span class="n">Tag</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"book"</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Some Book"</span><span class="p">)</span>
-<span class="n">security</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">"jwt"</span><span class="p">:</span> <span class="p">[]},</span>
-    <span class="p">{</span><span class="s2">"oauth2"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"write:pets"</span><span class="p">,</span> <span class="s2">"read:pets"</span><span class="p">]}</span>
-<span class="p">]</span>
+<span class="n">security</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"jwt"</span><span class="p">:</span> <span class="p">[]},</span> <span class="p">{</span><span class="s2">"oauth2"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"write:pets"</span><span class="p">,</span> <span class="s2">"read:pets"</span><span class="p">]}]</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">BookPath</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="n">bid</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"book id"</span><span class="p">)</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"book id"</span><span class="p">)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">BookQuery</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
@@ -1284,11 +1317,11 @@
 
 <span class="k">class</span><span class="w"> </span><span class="nc">BookBody</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">age</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Age"</span><span class="p">)</span>
-    <span class="n">author</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Author"</span><span class="p">)</span>
+    <span class="n">author</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Author"</span><span class="p">)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">BookBodyWithID</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="n">bid</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"book id"</span><span class="p">)</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"book id"</span><span class="p">)</span>
     <span class="n">age</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Age"</span><span class="p">)</span>
     <span class="n">author</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Author"</span><span class="p">)</span>
 
@@ -1300,21 +1333,20 @@
 
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-    <span class="s2">"/book/</span><span class="si">{bid}</span><span class="s2">"</span><span class="p">,</span>
+    <span class="s2">"/book/</span><span class="si">{id}</span><span class="s2">"</span><span class="p">,</span>
     <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">book_tag</span><span class="p">],</span>
     <span class="n">summary</span><span class="o">=</span><span class="s2">"new summary"</span><span class="p">,</span>
     <span class="n">description</span><span class="o">=</span><span class="s2">"new description"</span><span class="p">,</span>
-    <span class="n">responses</span><span class="o">=</span><span class="p">{</span><span class="mi">200</span><span class="p">:</span> <span class="n">BookResponse</span><span class="p">,</span> <span class="mi">201</span><span class="p">:</span> <span class="p">{</span><span class="s2">"content"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"text/csv"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"schema"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">}}}}},</span>
-    <span class="n">security</span><span class="o">=</span><span class="n">security</span>
+    <span class="n">security</span><span class="o">=</span><span class="n">security</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Get a book</span>
 <span class="sd">    to get some book by id, like:</span>
 <span class="sd">    http://localhost:8000/book/3</span>
 <span class="sd">    """</span>
-    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">bid</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">NotFoundResponse</span><span class="p">()</span><span class="o">.</span><span class="n">dict</span><span class="p">(),</span> <span class="mi">404</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">"code"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"bid"</span><span class="p">:</span> <span class="n">path</span><span class="o">.</span><span class="n">bid</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">"author"</span><span class="p">:</span> <span class="s2">"no"</span><span class="p">}}</span>
+    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">NotFoundResponse</span><span class="p">()</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">(),</span> <span class="mi">404</span>
+    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">({</span><span class="s2">"code"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"id"</span><span class="p">:</span> <span class="n">path</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">"author"</span><span class="p">:</span> <span class="s2">"no"</span><span class="p">}})</span>
 
 
 <span class="c1"># set doc_ui False disable openapi UI</span>
@@ -1324,38 +1356,38 @@
 <span class="sd">    to get all books</span>
 <span class="sd">    """</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">{</span>
-        <span class="s2">"code"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">,</span>
-        <span class="s2">"data"</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">{</span><span class="s2">"bid"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="n">query</span><span class="o">.</span><span class="n">age</span><span class="p">,</span> <span class="s2">"author"</span><span class="p">:</span> <span class="s2">"a1"</span><span class="p">},</span>
-            <span class="p">{</span><span class="s2">"bid"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="n">query</span><span class="o">.</span><span class="n">age</span><span class="p">,</span> <span class="s2">"author"</span><span class="p">:</span> <span class="s2">"a2"</span><span class="p">}</span>
-        <span class="p">]</span>
-    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">"code"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">,</span>
+            <span class="s2">"data"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"id"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="n">query</span><span class="o">.</span><span class="n">age</span><span class="p">,</span> <span class="s2">"author"</span><span class="p">:</span> <span class="s2">"a1"</span><span class="p">},</span> <span class="p">{</span><span class="s2">"id"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="n">query</span><span class="o">.</span><span class="n">age</span><span class="p">,</span> <span class="s2">"author"</span><span class="p">:</span> <span class="s2">"a2"</span><span class="p">}],</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/book"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">book_tag</span><span class="p">],</span> <span class="n">responses</span><span class="o">=</span><span class="p">{</span><span class="mi">200</span><span class="p">:</span> <span class="n">BookResponse</span><span class="p">})</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/book"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">book_tag</span><span class="p">])</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_book</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">"code"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">},</span> <span class="n">HTTPStatus</span><span class="o">.</span><span class="n">OK</span>
+    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">({</span><span class="s2">"code"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">})</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">"/book/</span><span class="si">{bid}</span><span class="s2">"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">book_tag</span><span class="p">])</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">"/book/</span><span class="si">{id}</span><span class="s2">"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">book_tag</span><span class="p">])</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">"code"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">({</span><span class="s2">"code"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">})</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">"/book/</span><span class="si">{bid}</span><span class="s2">"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">book_tag</span><span class="p">],</span> <span class="n">doc_ui</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">"/book/</span><span class="si">{id}</span><span class="s2">"</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">book_tag</span><span class="p">],</span> <span class="n">doc_ui</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">BookPath</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">"code"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">({</span><span class="s2">"code"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">})</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
-    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">"127.0.0.1"</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8000</span><span class="p">)</span>
+
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
 </code></pre></div></td></tr></tbody></table></div>
 <h2 id="apirouter">APIRouter<a class="headerlink" href="#apirouter" title="Permanent link">⚓︎</a></h2>
 <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
@@ -1412,87 +1444,61 @@
 <span class="normal">52</span>
 <span class="normal">53</span>
 <span class="normal">54</span>
-<span class="normal">55</span>
-<span class="normal">56</span>
-<span class="normal">57</span>
-<span class="normal">58</span>
-<span class="normal">59</span>
-<span class="normal">60</span>
-<span class="normal">61</span>
-<span class="normal">62</span>
-<span class="normal">63</span>
-<span class="normal">64</span>
-<span class="normal">65</span>
-<span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+<span class="normal">55</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">starlette.responses</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONResponse</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">star_openapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIRouter</span><span class="p">,</span> <span class="n">OpenAPI</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">star_openapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tag</span><span class="p">,</span> <span class="n">Info</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">star_openapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPI</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">star_openapi.router</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIRouter</span>
 
-<span class="n">info</span> <span class="o">=</span> <span class="n">Info</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"book API"</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">"1.0.0"</span><span class="p">)</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">()</span>
 
-<span class="n">jwt</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"http"</span><span class="p">,</span>
-    <span class="s2">"scheme"</span><span class="p">:</span> <span class="s2">"bearer"</span><span class="p">,</span>
-    <span class="s2">"bearerFormat"</span><span class="p">:</span> <span class="s2">"JWT"</span>
-<span class="p">}</span>
-<span class="n">security_schemes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"jwt"</span><span class="p">:</span> <span class="n">jwt</span><span class="p">}</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="n">info</span><span class="o">=</span><span class="n">info</span><span class="p">,</span> <span class="n">security_schemes</span><span class="o">=</span><span class="n">security_schemes</span><span class="p">)</span>
-
-<span class="n">tag</span> <span class="o">=</span> <span class="n">Tag</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"book"</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Some Book"</span><span class="p">)</span>
-<span class="n">security</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"jwt"</span><span class="p">:</span> <span class="p">[]}]</span>
+<span class="n">api1</span> <span class="o">=</span> <span class="n">APIRouter</span><span class="p">(</span><span class="n">url_prefix</span><span class="o">=</span><span class="s2">"/api1"</span><span class="p">)</span>
+<span class="n">api2</span> <span class="o">=</span> <span class="n">APIRouter</span><span class="p">(</span><span class="n">url_prefix</span><span class="o">=</span><span class="s2">"/api2"</span><span class="p">)</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">Unauthorized</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="n">code</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Status Code"</span><span class="p">)</span>
-    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="s2">"Unauthorized!"</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Exception Information"</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">IdModel</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
 
 
-<span class="n">api</span> <span class="o">=</span> <span class="n">APIRouter</span><span class="p">(</span>
-    <span class="n">url_prefix</span><span class="o">=</span><span class="s2">"/api"</span><span class="p">,</span>
-    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">tag</span><span class="p">],</span>
-    <span class="n">security</span><span class="o">=</span><span class="n">security</span><span class="p">,</span>
-    <span class="n">responses</span><span class="o">=</span><span class="p">{</span><span class="s2">"401"</span><span class="p">:</span> <span class="n">Unauthorized</span><span class="p">},</span>
-    <span class="c1"># disable openapi UI</span>
-    <span class="n">doc_ui</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BookModel</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">age</span><span class="p">:</span> <span class="nb">int</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">BookBody</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="n">age</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Age"</span><span class="p">)</span>
-    <span class="n">author</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_length</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Author"</span><span class="p">)</span>
+<span class="nd">@api1</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/book"</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">ge_book</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">({</span><span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Hello World1"</span><span class="p">})</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">Path</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="n">bid</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"book id"</span><span class="p">)</span>
+<span class="nd">@api1</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/book"</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_book</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">BookModel</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">model_dump</span><span class="p">())</span>
 
 
-<span class="nd">@api</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/book"</span><span class="p">,</span> <span class="n">doc_ui</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">():</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">"code"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">}</span>
+<span class="nd">@api1</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">"/book/</span><span class="si">{id}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">IdModel</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">BookModel</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">({</span><span class="s2">"id"</span><span class="p">:</span> <span class="n">path</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">:</span> <span class="n">body</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="n">body</span><span class="o">.</span><span class="n">age</span><span class="p">})</span>
 
 
-<span class="nd">@api</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/book"</span><span class="p">,</span> <span class="n">responses</span><span class="o">=</span><span class="p">{</span><span class="mi">201</span><span class="p">:</span> <span class="p">{</span><span class="s2">"content"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"text/csv"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"schema"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">}}}}})</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">create_book</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
-    <span class="k">assert</span> <span class="n">body</span><span class="o">.</span><span class="n">age</span> <span class="o">==</span> <span class="mi">3</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">"code"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">}</span>
+<span class="nd">@api1</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">"/book/</span><span class="si">{id}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">delete_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">IdModel</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">({</span><span class="s2">"id"</span><span class="p">:</span> <span class="n">path</span><span class="o">.</span><span class="n">id</span><span class="p">})</span>
 
 
-<span class="nd">@api</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">"/book/</span><span class="si">{bid}</span><span class="s2">"</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">update_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
-    <span class="k">assert</span> <span class="n">path</span><span class="o">.</span><span class="n">bid</span> <span class="o">==</span> <span class="mi">1</span>
-    <span class="k">assert</span> <span class="n">body</span><span class="o">.</span><span class="n">age</span> <span class="o">==</span> <span class="mi">3</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">"code"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">}</span>
+<span class="nd">@api2</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_api2</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">({</span><span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Hello World2"</span><span class="p">})</span>
 
 
-<span class="c1"># register api</span>
-<span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="n">api1</span><span class="o">.</span><span class="n">register_api</span><span class="p">(</span><span class="n">api2</span><span class="p">)</span>
+
+<span class="n">app</span><span class="o">.</span><span class="n">register_api</span><span class="p">(</span><span class="n">api1</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">register_api</span><span class="p">(</span><span class="n">api2</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
-    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">"127.0.0.1"</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8000</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">routes</span><span class="p">)</span>
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
 </code></pre></div></td></tr></tbody></table></div>
 <h2 id="upload-file-demo">Upload File Demo<a class="headerlink" href="#upload-file-demo" title="Permanent link">⚓︎</a></h2>
 <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
@@ -1518,12 +1524,29 @@
 <span class="normal">21</span>
 <span class="normal">22</span>
 <span class="normal">23</span>
-<span class="normal">24</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">starlette.responses</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONResponse</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">star_openapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">Info</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">starlette.datastructures</span><span class="w"> </span><span class="kn">import</span> <span class="n">UploadFile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">star_openapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPI</span><span class="p">,</span> <span class="n">UploadFile</span>
 
-<span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="n">info</span><span class="o">=</span><span class="n">Info</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"upload API"</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">"1.0.0"</span><span class="p">))</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">()</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">UploadFileForm</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
@@ -1531,17 +1554,69 @@
     <span class="n">file_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"File Type"</span><span class="p">)</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/upload"</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">UploadFilesForm</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">files</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">UploadFile</span><span class="p">]</span>
+    <span class="n">file_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"File Type"</span><span class="p">)</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/upload/file"</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">upload_file</span><span class="p">(</span><span class="n">form</span><span class="p">:</span> <span class="n">UploadFileForm</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">form</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">form</span><span class="o">.</span><span class="n">file_type</span><span class="p">)</span>
-    <span class="n">form</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">"test.jpg"</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">"code"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">}</span>
+
+    <span class="n">content</span> <span class="o">=</span> <span class="k">await</span> <span class="n">form</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">form</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">({</span><span class="s2">"code"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">})</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/upload/files"</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">upload_files</span><span class="p">(</span><span class="n">form</span><span class="p">:</span> <span class="n">UploadFilesForm</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">form</span><span class="o">.</span><span class="n">files</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">form</span><span class="o">.</span><span class="n">file_type</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">({</span><span class="s2">"code"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"ok"</span><span class="p">})</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
-    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">"127.0.0.1"</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8000</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">routes</span><span class="p">)</span>
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+</code></pre></div></td></tr></tbody></table></div>
+<h2 id="websocket-demo">Websocket Demo<a class="headerlink" href="#websocket-demo" title="Permanent link">⚓︎</a></h2>
+<div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">starlette.websockets</span><span class="w"> </span><span class="kn">import</span> <span class="n">WebSocket</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">star_openapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAPI</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">()</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">websocket</span><span class="p">(</span><span class="s2">"/ws"</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">websocket_endpoint</span><span class="p">(</span><span class="n">websocket</span><span class="p">:</span> <span class="n">WebSocket</span><span class="p">):</span>
+    <span class="k">await</span> <span class="n">websocket</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">websocket</span><span class="o">.</span><span class="n">receive_text</span><span class="p">()</span>
+        <span class="k">await</span> <span class="n">websocket</span><span class="o">.</span><span class="n">send_text</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">"websocket:app"</span><span class="p">,</span> <span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div></td></tr></tbody></table></div>
 <h2 id="a-complete-project">A complete project<a class="headerlink" href="#a-complete-project" title="Permanent link">⚓︎</a></h2>
 <p>see <a href="https://github.com/luolingchun/star-api-demo">star-api-demo</a></p>
@@ -1580,7 +1655,7 @@
       <nav class="md-footer__inner md-grid" aria-label="页脚">
         
           
-          <a href="../Usage/UI_Templates/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 自定义模板">
+          <a href="../Usage/CLI/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 命令行">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
@@ -1590,7 +1665,7 @@
                 上一页
               </span>
               <div class="md-ellipsis">
-                自定义模板
+                命令行
               </div>
             </div>
           </a>

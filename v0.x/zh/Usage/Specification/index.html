@@ -602,6 +602,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../Response/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    响应
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../Route_Operation/" class="md-nav__link">
         
   
@@ -666,6 +694,34 @@
     
   
     自定义模板
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CLI/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    命令行
   
 
     
@@ -1082,9 +1138,12 @@
 <h2 id="specification">Specification<a class="headerlink" href="#specification" title="Permanent link">⚓︎</a></h2>
 <p>If you need the complete Specification, go to <a href="http://127.0.0.1:8000/openapi/openapi.json">http://127.0.0.1:8000/openapi/openapi.json</a></p>
 <h2 id="info">info<a class="headerlink" href="#info" title="Permanent link">⚓︎</a></h2>
-<p><strong><code>star-openapi</code></strong> provide <a href="https://github.com/swagger-api/swagger-ui">Swagger UI</a>, <a href="https://github.com/Redocly/redoc">Redoc</a>, <a href="https://github.com/rapi-doc/RapiDoc">RapiDoc</a>, <a href="https://mrin9.github.io/RapiPdf/">RapiPdf</a>, <a href="https://github.com/scalar/scalar">Scalar</a> and <a href="https://github.com/stoplightio/elements">Elements</a> interactive documentation.
+<p><strong><code>star-openapi</code></strong>
+provide <a href="https://github.com/swagger-api/swagger-ui">Swagger UI</a>, <a href="https://github.com/Redocly/redoc">Redoc</a>, <a href="https://github.com/rapi-doc/RapiDoc">RapiDoc</a>, <a href="https://mrin9.github.io/RapiPdf/">RapiPdf</a>, <a href="https://github.com/scalar/scalar">Scalar</a>
+and <a href="https://github.com/stoplightio/elements">Elements</a> interactive documentation.
 Before that, you should know something about the <a href="https://spec.openapis.org/oas/v3.1.0">OpenAPI Specification</a>.</p>
-<p>You can use a dictionary to provide the info parameters: <strong><code>title</code></strong>, <strong><code>version</code></strong>... , more information sees the <a href="https://spec.openapis.org/oas/v3.1.0#info-object">OpenAPI Specification Info Object</a>.</p>
+<p>You can use a dictionary to provide the info parameters: <strong><code>title</code></strong>, <strong><code>version</code></strong>... , more information sees
+the <a href="https://spec.openapis.org/oas/v3.1.0#info-object">OpenAPI Specification Info Object</a>.</p>
 <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1109,7 +1168,8 @@ Before that, you should know something about the <a href="https://spec.openapis.
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../../../assets/openapi-all.png" data-desc-position="bottom"><img alt="openapi" src="../../../assets/openapi-all.png"></a></p>
 <h2 id="security_schemes">security_schemes<a class="headerlink" href="#security_schemes" title="Permanent link">⚓︎</a></h2>
 <p>There are some examples for Security Scheme Object,
-more features see the <a href="https://spec.openapis.org/oas/v3.1.0#security-scheme-object">OpenAPI Specification Security Scheme Object</a>.</p>
+more features see
+the <a href="https://spec.openapis.org/oas/v3.1.0#security-scheme-object">OpenAPI Specification Security Scheme Object</a>.</p>
 <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1196,7 +1256,7 @@ more features see the <a href="https://spec.openapis.org/oas/v3.1.0#security-sch
 <p>Second, add pass the <a href="../Route_Operation/#security"><strong>security</strong></a> to your api, like this:</p>
 <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
-<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="hll"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'/book/</span><span class="si">{bid}</span><span class="s1">'</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">book_tag</span><span class="p">],</span> <span class="n">security</span><span class="o">=</span><span class="n">security</span><span class="p">)</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="hll"><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'/book/</span><span class="si">{id}</span><span class="s1">'</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">book_tag</span><span class="p">],</span> <span class="n">security</span><span class="o">=</span><span class="n">security</span><span class="p">)</span>
 </span><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_book</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">BookBody</span><span class="p">):</span>
     <span class="o">...</span>
 </code></pre></div></td></tr></tbody></table></div>
@@ -1228,7 +1288,8 @@ more features see the <a href="https://spec.openapis.org/oas/v3.1.0#security-sch
 </span>    <span class="o">...</span>
 </code></pre></div></td></tr></tbody></table></div>
 <h2 id="servers">servers<a class="headerlink" href="#servers" title="Permanent link">⚓︎</a></h2>
-<p>An array of Server Objects, which provide connectivity information to a target server. If the server's property is not provided, or is an empty array, the default value would be a Server Object with an url value of /.</p>
+<p>An array of Server Objects, which provide connectivity information to a target server. If the server's property is not
+provided, or is an empty array, the default value would be a Server Object with an url value of /.</p>
 <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1245,7 +1306,8 @@ more features see the <a href="https://spec.openapis.org/oas/v3.1.0#security-sch
 </code></pre></div></td></tr></tbody></table></div>
 <h2 id="external_docs">external_docs<a class="headerlink" href="#external_docs" title="Permanent link">⚓︎</a></h2>
 <p>Allows referencing an external resource for extended documentation.</p>
-<p>More information to see <a href="https://spec.openapis.org/oas/v3.1.0#external-documentation-object">External Documentation Object</a>.</p>
+<p>More information to
+see <a href="https://spec.openapis.org/oas/v3.1.0#external-documentation-object">External Documentation Object</a>.</p>
 <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1261,7 +1323,7 @@ more features see the <a href="https://spec.openapis.org/oas/v3.1.0#security-sch
 <span class="n">app</span> <span class="o">=</span> <span class="n">OpenAPI</span><span class="p">(</span><span class="n">info</span><span class="o">=</span><span class="n">info</span><span class="p">,</span> <span class="n">external_docs</span><span class="o">=</span><span class="n">external_docs</span><span class="p">)</span>
 </code></pre></div></td></tr></tbody></table></div>
 <h2 id="openapi_extensions">openapi_extensions<a class="headerlink" href="#openapi_extensions" title="Permanent link">⚓︎</a></h2>
-<p>While the OpenAPI Specification tries to accommodate most use cases, 
+<p>While the OpenAPI Specification tries to accommodate most use cases,
 additional data can be added to extend the specification at certain points.
 See <a href="https://spec.openapis.org/oas/v3.1.0#specification-extensions">Specification Extensions</a>.</p>
 <p>It can also be available in every api, goto <a href="../Route_Operation/#openapi_extensions">Operation</a>.</p>
@@ -1305,13 +1367,13 @@ See <a href="https://spec.openapis.org/oas/v3.1.0#specification-extensions">Spec
 </code></pre></div></td></tr></tbody></table></div>
 <h2 id="validation-error">validation error<a class="headerlink" href="#validation-error" title="Permanent link">⚓︎</a></h2>
 <p>You can override validation error response use <code>validation_error_status</code>, <code>validation_error_model</code>
-and <code>validation_error_callback</code>. </p>
+and <code>validation_error_callback</code>.</p>
 <ul>
-<li>validation_error_status: HTTP Status of the response given when a validation error is detected by pydantic. 
-                           Defaults to 422.</li>
+<li>validation_error_status: HTTP Status of the response given when a validation error is detected by pydantic.
+  Defaults to 422.</li>
 <li>validation_error_model: Validation error response model for OpenAPI Specification.</li>
-<li>validation_error_callback: Validation error response callback, the return format corresponds to 
-                             the validation_error_model. Receive <code>ValidationError</code> and return <code>Starlette Response</code>.</li>
+<li>validation_error_callback: Validation error response callback, the return format corresponds to
+  the validation_error_model. Receive <code>ValidationError</code> and return <code>Starlette Response</code>.</li>
 </ul>
 <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>

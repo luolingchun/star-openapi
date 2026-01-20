@@ -27,15 +27,16 @@ Before submitting pr, you need to complete the following steps:
     ruff check star_openapi tests examples
     ```
 
-4. Running the mypy
+4. Running the ty
 
     ```bash
-    mypy star_openapi
+    ty check star_openapi
     ```
 
 5. Building the docs
 
-   Serve the live docs with [Material for MkDocs](https://github.com/squidfunk/mkdocs-material), and make sure it's correct.
+   Serve the live docs with [Material for MkDocs](https://github.com/squidfunk/mkdocs-material), and make sure it's
+   correct.
 
     ```bash
     mkdocs serve

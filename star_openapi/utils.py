@@ -67,10 +67,10 @@ def get_operation(
     operation_dict = {}
 
     if summary:
-        operation_dict["summary"] = summary  # type: ignore
+        operation_dict["summary"] = summary
 
     if description:
-        operation_dict["description"] = description  # type: ignore
+        operation_dict["description"] = description
 
     # Add any additional openapi_extensions to the operation dictionary
     operation_dict.update(openapi_extensions or {})
@@ -135,7 +135,7 @@ def parse_header(header: Type[BaseModel]) -> tuple[list[Parameter], dict]:
             data["example"] = value.get("example")
         if "examples" in value.keys():
             data["examples"] = value.get("examples")
-        parameters.append(Parameter(**data))
+        parameters.append(Parameter.model_validate(data))
 
     # Parse definitions
     definitions = schema.get("$defs", {})
@@ -168,7 +168,7 @@ def parse_cookie(cookie: Type[BaseModel]) -> tuple[list[Parameter], dict]:
             data["example"] = value.get("example")
         if "examples" in value.keys():
             data["examples"] = value.get("examples")
-        parameters.append(Parameter(**data))
+        parameters.append(Parameter.model_validate(data))
 
     # Parse definitions
     definitions = schema.get("$defs", {})
@@ -196,7 +196,7 @@ def parse_path(path: Type[BaseModel]) -> tuple[list[Parameter], dict]:
             data["example"] = value.get("example")
         if "examples" in value.keys():
             data["examples"] = value.get("examples")
-        parameters.append(Parameter(**data))
+        parameters.append(Parameter.model_validate(data))
 
     # Parse definitions
     definitions = schema.get("$defs", {})
@@ -229,7 +229,7 @@ def parse_query(query: Type[BaseModel]) -> tuple[list[Parameter], dict]:
             data["example"] = value.get("example")
         if "examples" in value.keys():
             data["examples"] = value.get("examples")
-        parameters.append(Parameter(**data))
+        parameters.append(Parameter.model_validate(data))
 
     # Parse definitions
     definitions = schema.get("$defs", {})
@@ -256,11 +256,7 @@ def parse_form(
     for k, v in properties.items():
         if v.get("type") == "array":
             encoding[k] = Encoding(style="form", explode=True)
-    content = {
-        "multipart/form-data": MediaType(
-            schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{title}"}),
-        )
-    }
+    content = {"multipart/form-data": MediaType.model_validate({"schema": {"$ref": f"{OPENAPI3_REF_PREFIX}/{title}"}})}
     if encoding:
         content["multipart/form-data"].encoding = encoding
 
@@ -282,7 +278,7 @@ def parse_body(
     original_title = schema.get("title") or body.__name__
     title = normalize_name(original_title)
     components_schemas[title] = Schema(**schema)
-    content = {"application/json": MediaType(schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{title}"}))}
+    content = {"application/json": MediaType.model_validate({"schema": {"$ref": f"{OPENAPI3_REF_PREFIX}/{title}"}})}
 
     # Parse definitions
     definitions = schema.get("$defs", {})
@@ -294,7 +290,7 @@ def parse_body(
 
 def parse_and_store_tags(
     new_tags: list[Tag | dict[str, Any]],
-    old_tags: list[Tag | dict[str, Any]],
+    old_tags: list[Tag],
     old_tag_names: list[str],
     operation: Operation,
 ) -> None:
@@ -344,10 +340,10 @@ def get_responses(responses: ResponseStrKeyDict, components_schemas: dict, opera
             schema = get_model_schema(response, mode="serialization")
             original_title = schema.get("title") or response.__name__
             name = normalize_name(original_title)
-            _responses[key] = Response(
-                description=HTTP_STATUS.get(key, ""),
-                content={"application/json": MediaType(schema=Schema(**{"$ref": f"{OPENAPI3_REF_PREFIX}/{name}"}))},
-            )
+            _responses[key] = Response(description=HTTP_STATUS.get(key, ""))
+            _responses[key].content = {
+                "application/json": MediaType.model_validate({"schema": {"$ref": f"{OPENAPI3_REF_PREFIX}/{name}"}})
+            }
 
             _schemas[name] = Schema(**schema)
             definitions = schema.get("$defs")

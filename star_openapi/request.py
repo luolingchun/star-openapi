@@ -59,7 +59,7 @@ async def _validate_header(request: Request, header: Type[BaseModel]):
         if value is not None:
             header_dict[key] = value
         if model_field_schema.get("type") == "null":
-            header_dict[key] = value  # type:ignore
+            header_dict[key] = value
     # extra keys
     for key, value in request_headers.items():
         if key not in header_dict.keys():

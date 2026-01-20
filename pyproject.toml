@@ -65,7 +65,7 @@ build-backend = "hatchling.build"
 path = "star_openapi/__version__.py"
 
 [dependency-groups]
-mypy = ["mypy"]
+ty = ["ty"]
 ruff = ["ruff"]
 test = ["pytest", "httpx"]
 doc = [
@@ -109,11 +109,3 @@ select = [
 [tool.ruff.lint.per-file-ignores]
 "star_openapi/__init__.py" = ["F401"]
 "star_openapi/models/__init__.py" = ["F401"]
-
-[tool.mypy]
-plugins = ["pydantic.mypy"]
-
-[[tool.mypy.overrides]]
-module = ["pydantic_core.*", "devtools.*"]
-follow_imports = "skip"
-ignore_missing_imports = true

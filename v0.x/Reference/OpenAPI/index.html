@@ -1039,8 +1039,7 @@
 
               <details class="mkdocstrings-source">
                 <summary>Source code in <code>star_openapi/openapi.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 46</span>
-<span class="normal"> 47</span>
+                <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 47</span>
 <span class="normal"> 48</span>
 <span class="normal"> 49</span>
 <span class="normal"> 50</span>
@@ -1579,7 +1578,9 @@
 <span class="normal">583</span>
 <span class="normal">584</span>
 <span class="normal">585</span>
-<span class="normal">586</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">OpenAPI</span><span class="p">(</span><span class="n">Starlette</span><span class="p">):</span>
+<span class="normal">586</span>
+<span class="normal">587</span>
+<span class="normal">588</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">OpenAPI</span><span class="p">(</span><span class="n">Starlette</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -1646,7 +1647,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">components</span> <span class="o">=</span> <span class="n">Components</span><span class="p">()</span>
 
         <span class="c1"># Initialize lists for tags and tag names</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Tag</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Tag</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Set URL prefixes and endpoints</span>
@@ -1677,7 +1678,6 @@
 
         <span class="c1"># Initialize specification JSON</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spec_json</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="o">=</span> <span class="n">OpenAPISpec</span><span class="p">(</span><span class="n">openapi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">openapi_version</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="n">paths</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cli</span> <span class="o">=</span> <span class="n">cli</span>
 
@@ -1733,19 +1733,23 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec_json</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_spec_json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">openapi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">openapi_version</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">paths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">paths</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="n">Info</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">)</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">OpenAPISpec</span><span class="p">(</span><span class="n">openapi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">openapi_version</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="n">paths</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="p">)</span>
+        <span class="n">spec</span><span class="o">.</span><span class="n">openapi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">openapi_version</span>
+        <span class="n">spec</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">severs</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">servers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">severs</span>
+            <span class="n">spec</span><span class="o">.</span><span class="n">servers</span> <span class="o">=</span> <span class="p">[</span><span class="n">Server</span><span class="p">(</span><span class="o">**</span><span class="n">server</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="n">server</span> <span class="k">for</span> <span class="n">server</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">severs</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_docs</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">externalDocs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_docs</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">external_docs</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">external_docs</span> <span class="o">=</span> <span class="n">ExternalDocumentation</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">external_docs</span><span class="p">)</span>
+            <span class="n">spec</span><span class="o">.</span><span class="n">externalDocs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_docs</span>
 
         <span class="c1"># Set tags</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span>
+            <span class="n">spec</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span>
 
         <span class="c1"># Add ValidationErrorModel to components schemas</span>
         <span class="n">schema</span> <span class="o">=</span> <span class="n">get_model_schema</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">validation_error_model</span><span class="p">)</span>
@@ -1759,10 +1763,10 @@
         <span class="c1"># Set components</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">schemas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">securitySchemes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">security_schemes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">components</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span>
+        <span class="n">spec</span><span class="o">.</span><span class="n">components</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span>
 
         <span class="c1"># Convert spec to JSON</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">spec_json</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span> <span class="n">by_alias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exclude_unset</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">warnings</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spec_json</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span> <span class="n">by_alias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exclude_unset</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">warnings</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="c1"># Update with OpenAPI extensions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spec_json</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">openapi_extensions</span><span class="p">)</span>
@@ -1788,8 +1792,6 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">register_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">:</span> <span class="n">APIRouter</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">api</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-                <span class="n">tag</span> <span class="o">=</span> <span class="n">Tag</span><span class="p">(</span><span class="o">**</span><span class="n">tag</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="p">:</span>
                 <span class="c1"># Append tag to the list of tags</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
@@ -1819,7 +1821,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">_collect_openapi_info</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+        <span class="n">func</span><span class="p">:</span> <span class="n">FunctionType</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
         <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Tag</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">summary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -2401,8 +2403,7 @@ Defaults to "/openapi.json".</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>star_openapi/openapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 47</span>
-<span class="normal"> 48</span>
+              <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 48</span>
 <span class="normal"> 49</span>
 <span class="normal"> 50</span>
 <span class="normal"> 51</span>
@@ -2566,7 +2567,7 @@ Defaults to "/openapi.json".</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">components</span> <span class="o">=</span> <span class="n">Components</span><span class="p">()</span>
 
     <span class="c1"># Initialize lists for tags and tag names</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Tag</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Tag</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># Set URL prefixes and endpoints</span>
@@ -2597,7 +2598,6 @@ Defaults to "/openapi.json".</p>
 
     <span class="c1"># Initialize specification JSON</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">spec_json</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="o">=</span> <span class="n">OpenAPISpec</span><span class="p">(</span><span class="n">openapi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">openapi_version</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="n">paths</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="p">)</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">cli</span> <span class="o">=</span> <span class="n">cli</span>
 </code></pre></div></td></tr></tbody></table></div>

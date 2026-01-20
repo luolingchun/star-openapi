@@ -1041,8 +1041,7 @@
 
               <details class="mkdocstrings-source">
                 <summary>Source code in <code>star_openapi/router.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 22</span>
-<span class="normal"> 23</span>
+                <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 23</span>
 <span class="normal"> 24</span>
 <span class="normal"> 25</span>
 <span class="normal"> 26</span>
@@ -1445,7 +1444,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span> <span class="o">=</span> <span class="n">url_prefix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Tag</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api_tags</span> <span class="o">=</span> <span class="n">tags</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">security</span> <span class="o">=</span> <span class="n">security</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">operation_id_callback</span> <span class="o">=</span> <span class="n">operation_id_callback</span>
@@ -1454,8 +1454,6 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">register_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api</span><span class="p">:</span> <span class="s2">"APIRouter"</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">api</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-                <span class="n">tag</span> <span class="o">=</span> <span class="n">Tag</span><span class="p">(</span><span class="o">**</span><span class="n">tag</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="p">:</span>
                 <span class="c1"># Append tag to the list of tags</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
@@ -1485,7 +1483,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">_collect_openapi_info</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+        <span class="n">func</span><span class="p">:</span> <span class="n">FunctionType</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
         <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Tag</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">summary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1539,7 +1537,7 @@
                 <span class="n">operation</span><span class="o">.</span><span class="n">servers</span> <span class="o">=</span> <span class="n">servers</span>
 
             <span class="c1"># Store tags</span>
-            <span class="n">tags</span> <span class="o">=</span> <span class="p">(</span><span class="n">tags</span> <span class="ow">or</span> <span class="p">[])</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span>
+            <span class="n">tags</span> <span class="o">=</span> <span class="p">(</span><span class="n">tags</span> <span class="ow">or</span> <span class="p">[])</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_tags</span>
             <span class="n">parse_and_store_tags</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
 
             <span class="c1"># Parse rule: merge url_prefix</span>
@@ -1950,8 +1948,7 @@
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>star_openapi/router.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">23</span>
-<span class="normal">24</span>
+              <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">24</span>
 <span class="normal">25</span>
 <span class="normal">26</span>
 <span class="normal">27</span>
@@ -1983,7 +1980,9 @@
 <span class="normal">53</span>
 <span class="normal">54</span>
 <span class="normal">55</span>
-<span class="normal">56</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">url_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
@@ -2011,7 +2010,8 @@
     <span class="bp">self</span><span class="o">.</span><span class="n">url_prefix</span> <span class="o">=</span> <span class="n">url_prefix</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">paths</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">components_schemas</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="n">tags</span> <span class="ow">or</span> <span class="p">[]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Tag</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">api_tags</span> <span class="o">=</span> <span class="n">tags</span> <span class="ow">or</span> <span class="p">[]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">tag_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">security</span> <span class="o">=</span> <span class="n">security</span> <span class="ow">or</span> <span class="p">[]</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">operation_id_callback</span> <span class="o">=</span> <span class="n">operation_id_callback</span>

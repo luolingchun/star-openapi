@@ -1,5 +1,6 @@
 from collections.abc import Callable
 from http import HTTPMethod
+from types import FunctionType
 from typing import Any
 
 from starlette.routing import Route, Router, WebSocketRoute
@@ -48,7 +49,8 @@ class APIRouter(Router):
         self.url_prefix = url_prefix
         self.paths: dict[str, Any] = {}
         self.components_schemas: dict[str, Any] = {}
-        self.tags = tags or []
+        self.tags: list[Tag] = []
+        self.api_tags = tags or []
         self.tag_names: list[str] = []
         self.security = security or []
         self.operation_id_callback = operation_id_callback
@@ -57,8 +59,6 @@ class APIRouter(Router):
 
     def register_api(self, api: "APIRouter"):
         for tag in api.tags:
-            if isinstance(tag, dict):
-                tag = Tag(**tag)
             if tag.name not in self.tag_names:
                 # Append tag to the list of tags
                 self.tags.append(tag)
@@ -88,7 +88,7 @@ class APIRouter(Router):
     def _collect_openapi_info(
         self,
         rule: str,
-        func: Callable,
+        func: FunctionType,
         *,
         tags: list[Tag | dict[str, Any]] | None = None,
         summary: str | None = None,
@@ -142,7 +142,7 @@ class APIRouter(Router):
                 operation.servers = servers
 
             # Store tags
-            tags = (tags or []) + self.tags
+            tags = (tags or []) + self.api_tags
             parse_and_store_tags(tags, self.tags, self.tag_names, operation)
 
             # Parse rule: merge url_prefix

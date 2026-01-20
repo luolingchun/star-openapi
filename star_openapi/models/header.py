@@ -7,7 +7,7 @@ class Header(Parameter):
     https://spec.openapis.org/oas/v3.1.0#header-object
     """
 
-    name: str | None = None  # type:ignore
-    param_in: ParameterInType | None = None  # type:ignore
+    name: str | None = None
+    param_in: ParameterInType | None = None
 
     model_config = {"extra": "allow"}

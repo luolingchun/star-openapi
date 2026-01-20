@@ -2,6 +2,7 @@ from collections.abc import Callable
 from http import HTTPMethod
 from importlib import import_module
 from importlib.metadata import entry_points
+from types import FunctionType
 from typing import Any, Type
 
 from jinja2 import Template
@@ -110,7 +111,7 @@ class OpenAPI(Starlette):
         self.components = Components()
 
         # Initialize lists for tags and tag names
-        self.tags: list[Tag | dict[str, Any]] = []
+        self.tags: list[Tag] = []
         self.tag_names: list[str] = []
 
         # Set URL prefixes and endpoints
@@ -141,7 +142,6 @@ class OpenAPI(Starlette):
 
         # Initialize specification JSON
         self.spec_json: dict[str, Any] = {}
-        self.spec = OpenAPISpec(openapi=self.openapi_version, info=self.info, paths=self.paths)
 
         self.cli = cli
 
@@ -197,19 +197,23 @@ class OpenAPI(Starlette):
         return self.spec_json
 
     def generate_spec_json(self):
-        self.spec.openapi = self.openapi_version
-        self.spec.info = self.info
-        self.spec.paths = self.paths
+        if isinstance(self.info, dict):
+            self.info = Info.model_validate(self.info)
+        spec = OpenAPISpec(openapi=self.openapi_version, info=self.info, paths=self.paths)
+        spec.openapi = self.openapi_version
+        spec.info = self.info
 
         if self.severs:
-            self.spec.servers = self.severs
+            spec.servers = [Server(**server) if isinstance(server, dict) else server for server in self.severs]
 
         if self.external_docs:
-            self.spec.externalDocs = self.external_docs
+            if isinstance(self.external_docs, dict):
+                self.external_docs = ExternalDocumentation.model_validate(self.external_docs)
+            spec.externalDocs = self.external_docs
 
         # Set tags
         if self.tags:
-            self.spec.tags = self.tags
+            spec.tags = self.tags
 
         # Add ValidationErrorModel to components schemas
         schema = get_model_schema(self.validation_error_model)
@@ -223,10 +227,10 @@ class OpenAPI(Starlette):
         # Set components
         self.components.schemas = self.components_schemas
         self.components.securitySchemes = self.security_schemes
-        self.spec.components = self.components
+        spec.components = self.components
 
         # Convert spec to JSON
-        self.spec_json = self.spec.model_dump(mode="json", by_alias=True, exclude_unset=True, warnings=False)
+        self.spec_json = spec.model_dump(mode="json", by_alias=True, exclude_unset=True, warnings=False)
 
         # Update with OpenAPI extensions
         self.spec_json.update(**self.openapi_extensions)
@@ -252,8 +256,6 @@ class OpenAPI(Starlette):
 
     def register_api(self, api: APIRouter):
         for tag in api.tags:
-            if isinstance(tag, dict):
-                tag = Tag(**tag)
             if tag.name not in self.tag_names:
                 # Append tag to the list of tags
                 self.tags.append(tag)
@@ -283,7 +285,7 @@ class OpenAPI(Starlette):
     def _collect_openapi_info(
         self,
         rule: str,
-        func: Callable,
+        func: FunctionType,
         *,
         tags: list[Tag | dict[str, Any]] | None = None,
         summary: str | None = None,

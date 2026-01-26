@@ -2,7 +2,7 @@ import importlib
 import os
 import ssl
 import sys
-from typing import Any, get_args
+from typing import TYPE_CHECKING, Any, get_args
 
 import click
 from click import Context
@@ -17,6 +17,9 @@ from uvicorn.config import (
     WSProtocolType,
 )
 from uvicorn.main import INTERFACE_CHOICES, LEVEL_CHOICES, LIFESPAN_CHOICES, print_version
+
+if TYPE_CHECKING:
+    from .openapi import OpenAPI
 
 
 def _metavar_from_type(_type: Any) -> str:
@@ -40,7 +43,7 @@ def _metavar_from_type(_type: Any) -> str:
 )
 @click.option("--uds", type=str, default=None, help="Bind to a UNIX domain socket.")
 @click.option("--fd", type=int, default=None, help="Bind to socket from this file descriptor.")
-@click.option("--reload", is_flag=True, default=True, help="Enable auto-reload.")
+@click.option("--reload", is_flag=True, default=False, help="Enable auto-reload.")
 @click.option(
     "--reload-dir",
     "reload_dirs",
@@ -459,8 +462,9 @@ def _load_app(app=None, verbose=False):
 
 
 class StarGroup(click.Group):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, app: "OpenAPI | None" = None, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.app = app
         self._is_loaded_app = False
         self.app_option = click.Option(
             ["-a", "--app"], default="asgi:app", envvar="UVICORN_APP", help="Application to run, like asgi:app."
@@ -505,7 +509,10 @@ class StarGroup(click.Group):
             if len(args) > idx + 1:
                 ctx.params["app"] = args[idx + 1]
 
-        self._ensure_app_loaded(ctx)
+        if self.app:
+            ctx.params["app"] = self.app
+        else:
+            self._ensure_app_loaded(ctx)
 
         if not remaining_args and args:
             click.echo(ctx.get_help())
@@ -514,12 +521,14 @@ class StarGroup(click.Group):
         return super().parse_args(ctx, args)
 
     def invoke(self, ctx: Context):
-        self._ensure_app_loaded(ctx)
+        if self.app is None:
+            self._ensure_app_loaded(ctx)
 
         return super().invoke(ctx)
 
     def get_help(self, ctx: Context) -> str:
-        self._ensure_app_loaded(ctx)
+        if self.app is None:
+            self._ensure_app_loaded(ctx)
         return super().get_help(ctx)
 
 

@@ -1,3 +1,7 @@
+## v0.9.2 2026-01-26
+
+- Add parameter app to StarGroup by @luolingchun in #4
+
 ## v0.9.1 2026-01-12
 
 - Support multi content type in request body and responses by @luolingchun in #2

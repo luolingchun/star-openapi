@@ -1,7 +1,5 @@
 import importlib
-import os
 import ssl
-import sys
 from typing import TYPE_CHECKING, Any, get_args
 
 import click
@@ -18,7 +16,7 @@ from uvicorn.config import (
 )
 from uvicorn.main import INTERFACE_CHOICES, LEVEL_CHOICES, LIFESPAN_CHOICES, print_version
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from .openapi import OpenAPI
 
 
@@ -387,7 +385,7 @@ def run_command(
     app_dir: str,
     h11_max_incomplete_event_size: int | None,
     factory: bool,
-) -> None:
+) -> None:  # pragma: no cover
     app = ctx.parent.params["app"]
     uvicorn_run(
         app,
@@ -441,15 +439,9 @@ def run_command(
     )
 
 
-def _load_app(app=None, verbose=False):
-    if app is None:
-        return None
-
+def _load_app(app: str = "asgi:app", verbose: bool = False):
     try:
         module, attr = app.split(":")
-        path = os.getcwd()
-        if path not in sys.path:
-            sys.path.append(path)
         importlib.import_module(module)
     except Exception as e:
         if verbose:
@@ -545,9 +537,5 @@ cli = StarGroup(
 cli.add_command(run_command, "run")
 
 
-def main():
+def main():  # pragma: no cover
     cli.main()
-
-
-if __name__ == "__main__":
-    main()

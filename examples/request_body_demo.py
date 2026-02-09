@@ -21,7 +21,7 @@ request_body_json = RequestBody(
 
 
 @app.post("/json", request_body=request_body_json)
-async def get_json(request: Request, body: BookModel):
+async def post_json(request: Request, body: BookModel):
     print(request.headers.get("content-type"))
     print(body.model_json_schema())
     return JSONResponse({"message": "Hello World"})
@@ -38,7 +38,7 @@ request_body = RequestBody(
 
 
 @app.post("/text", request_body=request_body)
-async def get_csv(request: Request):
+async def post_csv(request: Request):
     print(request.headers.get("content-type"))
     data = await request.body()
     print(data)

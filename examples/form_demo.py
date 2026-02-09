@@ -13,7 +13,7 @@ class BookModel(BaseModel):
 
 
 @app.post("/book")
-async def post_book(form: BookModel):
+async def create_book(form: BookModel):
     return JSONResponse(form.model_dump())
 
 

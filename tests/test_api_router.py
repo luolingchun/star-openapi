@@ -38,6 +38,11 @@ async def update_book(path: IdModel, body: BookModel):
     return JSONResponse({"id": path.id, "name": body.name, "age": body.age})
 
 
+@api1.patch("/book/{id}")
+async def patch_book(path: IdModel, body: BookModel):
+    return JSONResponse({"id": path.id, "name": body.name, "age": body.age})
+
+
 @api1.delete("/book/{id}")
 async def delete_book(path: IdModel):
     return JSONResponse({"id": path.id})
@@ -69,6 +74,12 @@ def test_post():
 def test_put():
     data = {"name": "test", "age": 1}
     response = client.put("/api1/book/1", json=data)
+    assert response.status_code == 200
+
+
+def test_patch():
+    data = {"name": "test", "age": 1}
+    response = client.patch("/api1/book/1", json=data)
     assert response.status_code == 200
 
 

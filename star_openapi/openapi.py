@@ -200,8 +200,6 @@ class OpenAPI(Starlette):
         if isinstance(self.info, dict):
             self.info = Info.model_validate(self.info)
         spec = OpenAPISpec(openapi=self.openapi_version, info=self.info, paths=self.paths)
-        spec.openapi = self.openapi_version
-        spec.info = self.info
 
         if self.severs:
             spec.servers = [Server(**server) if isinstance(server, dict) else server for server in self.severs]
@@ -238,8 +236,6 @@ class OpenAPI(Starlette):
         # Handle validation error response
         for rule, path_item in self.spec_json["paths"].items():
             for http_method, operation in path_item.items():
-                if operation.get("responses") is None:
-                    operation["responses"] = {}
                 if operation["responses"].get(self.validation_error_status):
                     continue
                 operation["responses"][self.validation_error_status] = {
@@ -255,6 +251,12 @@ class OpenAPI(Starlette):
                 }
 
     def register_api(self, api: APIRouter):
+        """
+        Register an APIRouter.
+
+        Args:
+            api: The APIBlueprint instance to register.
+        """
         for tag in api.tags:
             if tag.name not in self.tag_names:
                 # Append tag to the list of tags
@@ -375,6 +377,25 @@ class OpenAPI(Starlette):
         responses: ResponseDict | None = None,
         doc_ui: bool = True,
     ):
+        """
+        Decorator for defining a REST API endpoint with the HTTP GET method.
+        More information goto https://spec.openapis.org/oas/v3.1.0#operation-object
+
+        Args:
+            rule: The URL rule string.
+            tags: Adds metadata to a single tag.
+            summary: A short summary of what the operation does.
+            description: A verbose explanation of the operation behavior.
+            external_docs: Additional external documentation for this operation.
+            operation_id: Unique string used to identify the operation.
+            deprecated: Declares this operation to be deprecated.
+            security: A declaration of which security mechanisms can be used for this operation.
+            servers: An alternative server array to service this operation.
+            openapi_extensions: Allows extensions to the OpenAPI Schema.
+            responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
+            doc_ui: Declares this operation to be shown. Default to True.
+        """
+
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = self._collect_openapi_info(
                 rule,
@@ -417,6 +438,25 @@ class OpenAPI(Starlette):
         responses: ResponseDict | None = None,
         doc_ui: bool = True,
     ):
+        """
+        Decorator for defining a REST API endpoint with the HTTP POST method.
+        More information goto https://spec.openapis.org/oas/v3.1.0#operation-object
+
+        Args:
+            rule: The URL rule string.
+            tags: Adds metadata to a single tag.
+            summary: A short summary of what the operation does.
+            description: A verbose explanation of the operation behavior.
+            external_docs: Additional external documentation for this operation.
+            operation_id: Unique string used to identify the operation.
+            deprecated: Declares this operation to be deprecated.
+            security: A declaration of which security mechanisms can be used for this operation.
+            servers: An alternative server array to service this operation.
+            openapi_extensions: Allows extensions to the OpenAPI Schema.
+            responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
+            doc_ui: Declares this operation to be shown. Default to True.
+        """
+
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = self._collect_openapi_info(
                 rule,
@@ -460,6 +500,25 @@ class OpenAPI(Starlette):
         responses: ResponseDict | None = None,
         doc_ui: bool = True,
     ):
+        """
+        Decorator for defining a REST API endpoint with the HTTP PUT method.
+        More information goto https://spec.openapis.org/oas/v3.1.0#operation-object
+
+        Args:
+            rule: The URL rule string.
+            tags: Adds metadata to a single tag.
+            summary: A short summary of what the operation does.
+            description: A verbose explanation of the operation behavior.
+            external_docs: Additional external documentation for this operation.
+            operation_id: Unique string used to identify the operation.
+            deprecated: Declares this operation to be deprecated.
+            security: A declaration of which security mechanisms can be used for this operation.
+            servers: An alternative server array to service this operation.
+            openapi_extensions: Allows extensions to the OpenAPI Schema.
+            responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
+            doc_ui: Declares this operation to be shown. Default to True.
+        """
+
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = self._collect_openapi_info(
                 rule,
@@ -503,6 +562,25 @@ class OpenAPI(Starlette):
         responses: ResponseDict | None = None,
         doc_ui: bool = True,
     ):
+        """
+        Decorator for defining a REST API endpoint with the HTTP DELETE method.
+        More information goto https://spec.openapis.org/oas/v3.1.0#operation-object
+
+        Args:
+            rule: The URL rule string.
+            tags: Adds metadata to a single tag.
+            summary: A short summary of what the operation does.
+            description: A verbose explanation of the operation behavior.
+            external_docs: Additional external documentation for this operation.
+            operation_id: Unique string used to identify the operation.
+            deprecated: Declares this operation to be deprecated.
+            security: A declaration of which security mechanisms can be used for this operation.
+            servers: An alternative server array to service this operation.
+            openapi_extensions: Allows extensions to the OpenAPI Schema.
+            responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
+            doc_ui: Declares this operation to be shown. Default to True.
+        """
+
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = self._collect_openapi_info(
                 rule,
@@ -546,6 +624,25 @@ class OpenAPI(Starlette):
         responses: ResponseDict | None = None,
         doc_ui: bool = True,
     ):
+        """
+        Decorator for defining a REST API endpoint with the HTTP PATCH method.
+        More information goto https://spec.openapis.org/oas/v3.1.0#operation-object
+
+        Args:
+            rule: The URL rule string.
+            tags: Adds metadata to a single tag.
+            summary: A short summary of what the operation does.
+            description: A verbose explanation of the operation behavior.
+            external_docs: Additional external documentation for this operation.
+            operation_id: Unique string used to identify the operation.
+            deprecated: Declares this operation to be deprecated.
+            security: A declaration of which security mechanisms can be used for this operation.
+            servers: An alternative server array to service this operation.
+            openapi_extensions: Allows extensions to the OpenAPI Schema.
+            responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
+            doc_ui: Declares this operation to be shown. Default to True.
+        """
+
         def decorator(func) -> Callable:
             header, cookie, path, query, form, body = self._collect_openapi_info(
                 rule,

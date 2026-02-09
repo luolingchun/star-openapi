@@ -43,19 +43,19 @@ async def _validate_header(request: Request, header: Type[BaseModel]):
     header_dict = {}
     model_properties = header.model_json_schema().get("properties", {})
     for model_field_key, model_field_value in header.model_fields.items():
-        key_title = model_field_key.replace("_", "-").title()
+        key_lower = model_field_key.lower()
         model_field_schema = model_properties.get(model_field_value.alias or model_field_key)
         if model_field_value.alias and header.model_config.get("populate_by_name"):
             key = model_field_value.alias
-            key_alias_title = model_field_value.alias.replace("_", "-").title()
-            value = request_headers.get(key_alias_title) or request_headers.get(key_title)
+            key_alias_title = model_field_value.alias.lower()
+            value = request_headers.get(key_alias_title) or request_headers.get(key_lower)
         elif model_field_value.alias:
             key = model_field_value.alias
-            key_alias_title = model_field_value.alias.replace("_", "-").title()
+            key_alias_title = model_field_value.alias.lower()
             value = request_headers.get(key_alias_title)
         else:
             key = model_field_key
-            value = request_headers[key_title]
+            value = request_headers.get(key_lower)
         if value is not None:
             header_dict[key] = value
         if model_field_schema.get("type") == "null":

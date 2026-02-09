@@ -34,6 +34,10 @@ dependencies = [
     "click>=8.0.0",
 ]
 
+[project.urls]
+Homepage = "https://github.com/luolingchun/star-openapi"
+Documentation = "https://luolingchun.github.io/star-openapi"
+
 [project.optional-dependencies]
 full = [
     "itsdangerous",
@@ -48,21 +52,6 @@ rapidoc = ["star-openapi-rapidoc"]
 rapipdf = ["star-openapi-rapipdf"]
 scalar = ["star-openapi-scalar"]
 elements = ["star-openapi-elements"]
-
-
-[project.urls]
-Homepage = "https://github.com/luolingchun/star-openapi"
-Documentation = "https://luolingchun.github.io/star-openapi"
-
-[project.scripts]
-star = "star_openapi.cli:main"
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.hatch.version]
-path = "star_openapi/__version__.py"
 
 [dependency-groups]
 ty = ["ty"]
@@ -88,6 +77,16 @@ dev = [
     "star-openapi-scalar",
     "star-openapi-elements"
 ]
+
+[project.scripts]
+star = "star_openapi.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "star_openapi/__version__.py"
 
 [tool.uv]
 default-groups = "all"

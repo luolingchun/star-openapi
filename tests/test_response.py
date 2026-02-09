@@ -14,9 +14,14 @@ api = APIRouter(url_prefix="/api", responses={200: Response(description="API OK"
 client = TestClient(app)
 
 
-class BookModel(BaseModel):
+class AuthorModel(BaseModel):
     name: str
     age: int
+
+
+class BookModel(BaseModel):
+    name: str
+    authors: list[AuthorModel] | None = None
 
 
 @app.post("/book1")
@@ -35,7 +40,8 @@ def response2(body: BookModel):
         "200": {
             "description": "Custom OK",
             "content": {"application/custom+json": {"schema": BookModel.model_json_schema()}},
-        }
+        },
+        "204": None,
     },
 )
 def response3(body: BookModel):
@@ -77,3 +83,12 @@ def test_response():
     assert _json["paths"]["/api/book4"]["post"]["responses"]["200"]["description"] == "API OK"
     assert _json["paths"]["/api/book5"]["post"]["responses"]["200"]["content"]["application/json"] is not None
     assert _json["paths"]["/api/book6"]["post"]["responses"]["200"]["content"]["application/custom+json"] is not None
+
+
+def test():
+    assert client.post("/book1", json={"name": "bob", "age": 3}).status_code == 200
+    assert client.post("/book2", json={"name": "bob", "age": 3}).status_code == 200
+    assert client.post("/book3", json={"name": "bob", "age": 3}).status_code == 200
+    assert client.post("/api/book4", json={"name": "bob", "age": 3}).status_code == 200
+    assert client.post("/api/book5", json={"name": "bob", "age": 3}).status_code == 200
+    assert client.post("/api/book6", json={"name": "bob", "age": 3}).status_code == 200

@@ -444,30 +444,15 @@ def parse_method(uri: str, method: str, paths: dict, operation: Operation) -> No
     """
     # Check the HTTP method and update the PathItem object in the path dictionary
     if method == HTTPMethod.GET:
-        if not paths.get(uri):
-            paths[uri] = PathItem(get=operation)
-        else:
-            paths[uri].get = operation
+        paths.setdefault(uri, PathItem()).get = operation
     elif method == HTTPMethod.POST:
-        if not paths.get(uri):
-            paths[uri] = PathItem(post=operation)
-        else:
-            paths[uri].post = operation
+        paths.setdefault(uri, PathItem()).post = operation
     elif method == HTTPMethod.PUT:
-        if not paths.get(uri):
-            paths[uri] = PathItem(put=operation)
-        else:
-            paths[uri].put = operation
+        paths.setdefault(uri, PathItem()).put = operation
     elif method == HTTPMethod.PATCH:
-        if not paths.get(uri):
-            paths[uri] = PathItem(patch=operation)
-        else:
-            paths[uri].patch = operation
+        paths.setdefault(uri, PathItem()).patch = operation
     elif method == HTTPMethod.DELETE:
-        if not paths.get(uri):
-            paths[uri] = PathItem(delete=operation)
-        else:
-            paths[uri].delete = operation
+        paths.setdefault(uri, PathItem()).delete = operation
 
 
 def make_validation_error_response(_request: Request, e: ValidationError) -> JSONResponse:

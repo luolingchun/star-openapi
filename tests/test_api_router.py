@@ -48,7 +48,7 @@ async def delete_book(path: IdModel):
     return JSONResponse({"id": path.id})
 
 
-@api2.get("/")
+@api2.get("")
 async def get_api2():
     return JSONResponse({"message": "Hello World2"})
 

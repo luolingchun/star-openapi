@@ -1,9 +1,11 @@
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable, Collection
 from http import HTTPMethod
 from types import FunctionType
-from typing import Any
+from typing import Any, Sequence
 
-from starlette.routing import Route, Router, WebSocketRoute
+from starlette.middleware import Middleware
+from starlette.routing import Request, Response, Route, Router, WebSocketRoute
+from starlette.websockets import WebSocket
 
 from .endpoint import create_endpoint
 from .models import ExternalDocumentation, RequestBody, Server, Tag
@@ -18,6 +20,50 @@ from .utils import (
     parse_parameters,
     parse_rule,
 )
+
+
+class APIRoute(Route):
+    def __init__(
+        self,
+        path: str,
+        origin_path: str,
+        endpoint: Callable[..., Any],
+        *,
+        methods: Collection[str] | None = None,
+        name: str | None = None,
+        include_in_schema: bool = True,
+        middleware: Sequence[Middleware] | None = None,
+    ):
+        super().__init__(
+            path=path,
+            endpoint=endpoint,
+            methods=methods,
+            name=name,
+            include_in_schema=include_in_schema,
+            middleware=middleware,
+        )
+
+        self.origin_path = origin_path
+
+
+class APIWebSocketRoute(WebSocketRoute):
+    def __init__(
+        self,
+        path: str,
+        origin_path: str,
+        endpoint: Callable[..., Any],
+        *,
+        name: str | None = None,
+        middleware: Sequence[Middleware] | None = None,
+    ):
+        super().__init__(
+            path=path,
+            endpoint=endpoint,
+            name=name,
+            middleware=middleware,
+        )
+
+        self.origin_path = origin_path
 
 
 class APIRouter(Router):
@@ -79,17 +125,17 @@ class APIRouter(Router):
 
         # Register the APIRouter with the current instance
         for route in api.routes:
-            if isinstance(route, Route):
-                path_with_prefix = api.url_prefix + route.path
-                self.add_route(
+            if isinstance(route, APIRoute):
+                path_with_prefix = api.url_prefix + route.origin_path
+                self._add_route(
                     path=path_with_prefix,
                     endpoint=route.endpoint,
                     methods=route.methods,
                     name=route.name,
                 )
-            elif isinstance(route, WebSocketRoute):
-                path_with_prefix = api.url_prefix + route.path
-                self.add_websocket_route(path=path_with_prefix, endpoint=route.endpoint, name=route.name)
+            elif isinstance(route, APIWebSocketRoute):
+                path_with_prefix = api.url_prefix + route.origin_path
+                self._add_websocket_route(path=path_with_prefix, endpoint=route.endpoint, name=route.name)
 
     def _collect_openapi_info(
         self,
@@ -173,6 +219,43 @@ class APIRouter(Router):
         else:
             return parse_parameters(func, doc_ui=False)
 
+    def _add_route(
+        self,
+        path: str,
+        endpoint: Callable[[Request], Awaitable[Response] | Response],
+        methods: Collection[str] | None = None,
+        name: str | None = None,
+        include_in_schema: bool = True,
+    ) -> None:
+        if not path.startswith("/"):
+            origin_path = path
+            path = "/" + path
+        else:
+            origin_path = path
+        route = APIRoute(
+            path=path,
+            origin_path=origin_path,
+            endpoint=endpoint,
+            methods=methods,
+            name=name,
+            include_in_schema=include_in_schema,
+        )
+        self.routes.append(route)
+
+    def _add_websocket_route(
+        self,
+        path: str,
+        endpoint: Callable[[WebSocket], Awaitable[None]],
+        name: str | None = None,
+    ) -> None:
+        if not path.startswith("/"):
+            origin_path = path
+            path = "/" + path
+        else:
+            origin_path = path
+        route = APIWebSocketRoute(path=path, origin_path=origin_path, endpoint=endpoint, name=name)
+        self.routes.append(route)
+
     def get(
         self,
         rule: str,
@@ -196,6 +279,7 @@ class APIRouter(Router):
 
         Args:
             rule: The URL rule string.
+            name: The URL name string.
             tags: Adds metadata to a single tag.
             summary: A short summary of what the operation does.
             description: A verbose explanation of the operation behavior.
@@ -227,7 +311,7 @@ class APIRouter(Router):
                 method=HTTPMethod.GET,
             )
             endpoint = create_endpoint(func, header, cookie, path, query, form, body)
-            self.add_route(rule, endpoint, methods=["GET"], name=name, include_in_schema=False)
+            self._add_route(rule, endpoint, methods=["GET"], name=name, include_in_schema=False)
 
             return func
 
@@ -257,6 +341,7 @@ class APIRouter(Router):
 
         Args:
             rule: The URL rule string.
+            name: The URL name string.
             tags: Adds metadata to a single tag.
             summary: A short summary of what the operation does.
             description: A verbose explanation of the operation behavior.
@@ -266,6 +351,7 @@ class APIRouter(Router):
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
+            request_body: Advanced configuration in OpenAPI.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             doc_ui: Declares this operation to be shown. Default to True.
         """
@@ -289,7 +375,7 @@ class APIRouter(Router):
                 method=HTTPMethod.POST,
             )
             endpoint = create_endpoint(func, header, cookie, path, query, form, body)
-            self.add_route(rule, endpoint, methods=["POST"], name=name, include_in_schema=False)
+            self._add_route(rule, endpoint, methods=["POST"], name=name, include_in_schema=False)
 
             return func
 
@@ -319,6 +405,7 @@ class APIRouter(Router):
 
         Args:
             rule: The URL rule string.
+            name: The URL name string.
             tags: Adds metadata to a single tag.
             summary: A short summary of what the operation does.
             description: A verbose explanation of the operation behavior.
@@ -328,6 +415,7 @@ class APIRouter(Router):
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
+            request_body: Advanced configuration in OpenAPI.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             doc_ui: Declares this operation to be shown. Default to True.
         """
@@ -351,7 +439,7 @@ class APIRouter(Router):
                 method=HTTPMethod.PUT,
             )
             endpoint = create_endpoint(func, header, cookie, path, query, form, body)
-            self.add_route(rule, endpoint, methods=["PUT"], name=name, include_in_schema=False)
+            self._add_route(rule, endpoint, methods=["PUT"], name=name, include_in_schema=False)
 
             return func
 
@@ -381,6 +469,7 @@ class APIRouter(Router):
 
         Args:
             rule: The URL rule string.
+            name: The URL name string.
             tags: Adds metadata to a single tag.
             summary: A short summary of what the operation does.
             description: A verbose explanation of the operation behavior.
@@ -390,6 +479,7 @@ class APIRouter(Router):
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
+            request_body: Advanced configuration in OpenAPI.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             doc_ui: Declares this operation to be shown. Default to True.
         """
@@ -413,7 +503,7 @@ class APIRouter(Router):
                 method=HTTPMethod.DELETE,
             )
             endpoint = create_endpoint(func, header, cookie, path, query, form, body)
-            self.add_route(rule, endpoint, methods=["DELETE"], name=name, include_in_schema=False)
+            self._add_route(rule, endpoint, methods=["DELETE"], name=name, include_in_schema=False)
 
             return func
 
@@ -443,6 +533,7 @@ class APIRouter(Router):
 
         Args:
             rule: The URL rule string.
+            name: The URL name string.
             tags: Adds metadata to a single tag.
             summary: A short summary of what the operation does.
             description: A verbose explanation of the operation behavior.
@@ -452,6 +543,7 @@ class APIRouter(Router):
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
+            request_body: Advanced configuration in OpenAPI.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             doc_ui: Declares this operation to be shown. Default to True.
         """
@@ -475,7 +567,7 @@ class APIRouter(Router):
                 method=HTTPMethod.PATCH,
             )
             endpoint = create_endpoint(func, header, cookie, path, query, form, body)
-            self.add_route(rule, endpoint, methods=["PATCH"], name=name, include_in_schema=False)
+            self._add_route(rule, endpoint, methods=["PATCH"], name=name, include_in_schema=False)
 
             return func
 
@@ -488,7 +580,7 @@ class APIRouter(Router):
         name: str | None = None,
     ):
         def decorator(func) -> Callable:
-            self.add_websocket_route(
+            self._add_websocket_route(
                 rule,
                 func,
                 name=name,

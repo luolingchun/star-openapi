@@ -6,7 +6,7 @@ from star_openapi.router import APIRouter
 
 app = OpenAPI()
 
-api = APIRouter(url_prefix="/test")
+api = APIRouter(url_prefix="/test/ws")
 
 client = TestClient(app)
 
@@ -19,7 +19,7 @@ async def websocket_endpoint(websocket: WebSocket):
     await websocket.close()
 
 
-@api.websocket("/ws")
+@api.websocket("")
 async def websocket_endpoint_with_api_router(websocket: WebSocket):
     await websocket.accept()
     data = await websocket.receive_text()

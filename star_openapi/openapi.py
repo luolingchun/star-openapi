@@ -9,7 +9,7 @@ from jinja2 import Template
 from pydantic import BaseModel, ValidationError
 from starlette.applications import Starlette
 from starlette.responses import HTMLResponse, JSONResponse
-from starlette.routing import Mount, Route, WebSocketRoute
+from starlette.routing import Mount, Route
 
 from .cli import cli
 from .config import Config
@@ -27,7 +27,7 @@ from .models import (
     Tag,
     ValidationErrorModel,
 )
-from .router import APIRouter
+from .router import APIRoute, APIRouter, APIWebSocketRoute
 from .templates import openapi_html_string
 from .types import ParametersTuple, ResponseDict
 from .utils import (
@@ -272,16 +272,16 @@ class OpenAPI(Starlette):
 
         # Register the APIRouter with the current instance
         for route in api.routes:
-            if isinstance(route, Route):
-                path_with_prefix = api.url_prefix + route.path
+            if isinstance(route, APIRoute):
+                path_with_prefix = api.url_prefix + route.origin_path
                 self.router.add_route(
                     path=path_with_prefix,
                     endpoint=route.endpoint,
                     methods=route.methods,
                     name=route.name,
                 )
-            elif isinstance(route, WebSocketRoute):
-                path_with_prefix = api.url_prefix + route.path
+            elif isinstance(route, APIWebSocketRoute):
+                path_with_prefix = api.url_prefix + route.origin_path
                 self.router.add_websocket_route(path=path_with_prefix, endpoint=route.endpoint, name=route.name)
 
     def _collect_openapi_info(
@@ -383,6 +383,7 @@ class OpenAPI(Starlette):
 
         Args:
             rule: The URL rule string.
+            name: The URL name string.
             tags: Adds metadata to a single tag.
             summary: A short summary of what the operation does.
             description: A verbose explanation of the operation behavior.
@@ -444,6 +445,7 @@ class OpenAPI(Starlette):
 
         Args:
             rule: The URL rule string.
+            name: The URL name string.
             tags: Adds metadata to a single tag.
             summary: A short summary of what the operation does.
             description: A verbose explanation of the operation behavior.
@@ -453,6 +455,7 @@ class OpenAPI(Starlette):
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
+            request_body: Advanced configuration in OpenAPI.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             doc_ui: Declares this operation to be shown. Default to True.
         """
@@ -506,6 +509,7 @@ class OpenAPI(Starlette):
 
         Args:
             rule: The URL rule string.
+            name: The URL name string.
             tags: Adds metadata to a single tag.
             summary: A short summary of what the operation does.
             description: A verbose explanation of the operation behavior.
@@ -515,6 +519,7 @@ class OpenAPI(Starlette):
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
+            request_body: Advanced configuration in OpenAPI.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             doc_ui: Declares this operation to be shown. Default to True.
         """
@@ -568,6 +573,7 @@ class OpenAPI(Starlette):
 
         Args:
             rule: The URL rule string.
+            name: The URL name string.
             tags: Adds metadata to a single tag.
             summary: A short summary of what the operation does.
             description: A verbose explanation of the operation behavior.
@@ -577,6 +583,7 @@ class OpenAPI(Starlette):
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
+            request_body: Advanced configuration in OpenAPI.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             doc_ui: Declares this operation to be shown. Default to True.
         """
@@ -630,6 +637,7 @@ class OpenAPI(Starlette):
 
         Args:
             rule: The URL rule string.
+            name: The URL name string.
             tags: Adds metadata to a single tag.
             summary: A short summary of what the operation does.
             description: A verbose explanation of the operation behavior.
@@ -639,6 +647,7 @@ class OpenAPI(Starlette):
             security: A declaration of which security mechanisms can be used for this operation.
             servers: An alternative server array to service this operation.
             openapi_extensions: Allows extensions to the OpenAPI Schema.
+            request_body: Advanced configuration in OpenAPI.
             responses: API responses should be either a subclass of BaseModel, a dictionary, or None.
             doc_ui: Declares this operation to be shown. Default to True.
         """

@@ -2,224 +2,224 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.x/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.xzh/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/Changelog/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.x/Changelog/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.xzh/Changelog/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/Contributing/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.x/Contributing/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.xzh/Contributing/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/Example/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.x/Example/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.xzh/Example/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/LICENSE/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.x/LICENSE/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.xzh/LICENSE/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/Quickstart/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.x/Quickstart/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.xzh/Quickstart/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/Reference/APIRouter/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.x/Reference/APIRouter/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.xzh/Reference/APIRouter/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/Reference/Models/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.x/Reference/Models/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.xzh/Reference/Models/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/Reference/OpenAPI/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.x/Reference/OpenAPI/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.xzh/Reference/OpenAPI/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/Usage/CLI/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.x/Usage/CLI/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.xzh/Usage/CLI/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/Usage/Configuration/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.x/Usage/Configuration/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.xzh/Usage/Configuration/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/Usage/Request/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.x/Usage/Request/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.xzh/Usage/Request/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/Usage/Response/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.x/Usage/Response/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.xzh/Usage/Response/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/Usage/Route_Operation/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.x/Usage/Route_Operation/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.xzh/Usage/Route_Operation/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/Usage/Specification/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.x/Usage/Specification/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.xzh/Usage/Specification/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/Usage/UI_Templates/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.x/Usage/UI_Templates/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.xzh/Usage/UI_Templates/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/zh/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.x/zh/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.x"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/zh/Changelog/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.x/zh/Changelog/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.xChangelog/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/zh/Contributing/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.x/zh/Contributing/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.xContributing/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/zh/Example/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.x/zh/Example/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.xExample/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/zh/LICENSE/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.x/zh/LICENSE/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.xLICENSE/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/zh/Quickstart/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.x/zh/Quickstart/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.xQuickstart/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/zh/Reference/APIRouter/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.x/zh/Reference/APIRouter/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.xReference/APIRouter/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/zh/Reference/Models/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.x/zh/Reference/Models/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.xReference/Models/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/zh/Reference/OpenAPI/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.x/zh/Reference/OpenAPI/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.xReference/OpenAPI/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/zh/Usage/CLI/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.x/zh/Usage/CLI/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.xUsage/CLI/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/zh/Usage/Configuration/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.x/zh/Usage/Configuration/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.xUsage/Configuration/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/zh/Usage/Request/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.x/zh/Usage/Request/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.xUsage/Request/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/zh/Usage/Response/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.x/zh/Usage/Response/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.xUsage/Response/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/zh/Usage/Route_Operation/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.x/zh/Usage/Route_Operation/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.xUsage/Route_Operation/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/zh/Usage/Specification/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.x/zh/Usage/Specification/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.xUsage/Specification/"/>
     </url>
     <url>
         <loc>https://luolingchun.github.io/star-openapi/v0.x/zh/Usage/UI_Templates/</loc>
-        <lastmod>2026-02-09</lastmod>
+        <lastmod>2026-03-02</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="zh" href="https://luolingchun.github.io/star-openapi/v0.x/zh/Usage/UI_Templates/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://luolingchun.github.io/star-openapi/v0.xUsage/UI_Templates/"/>

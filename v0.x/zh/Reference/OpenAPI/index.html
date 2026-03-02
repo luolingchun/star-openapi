@@ -1811,7 +1811,16 @@
 <span class="normal">682</span>
 <span class="normal">683</span>
 <span class="normal">684</span>
-<span class="normal">685</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">OpenAPI</span><span class="p">(</span><span class="n">Starlette</span><span class="p">):</span>
+<span class="normal">685</span>
+<span class="normal">686</span>
+<span class="normal">687</span>
+<span class="normal">688</span>
+<span class="normal">689</span>
+<span class="normal">690</span>
+<span class="normal">691</span>
+<span class="normal">692</span>
+<span class="normal">693</span>
+<span class="normal">694</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">OpenAPI</span><span class="p">(</span><span class="n">Starlette</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -2039,16 +2048,16 @@
 
         <span class="c1"># Register the APIRouter with the current instance</span>
         <span class="k">for</span> <span class="n">route</span> <span class="ow">in</span> <span class="n">api</span><span class="o">.</span><span class="n">routes</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">Route</span><span class="p">):</span>
-                <span class="n">path_with_prefix</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">url_prefix</span> <span class="o">+</span> <span class="n">route</span><span class="o">.</span><span class="n">path</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">APIRoute</span><span class="p">):</span>
+                <span class="n">path_with_prefix</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">url_prefix</span> <span class="o">+</span> <span class="n">route</span><span class="o">.</span><span class="n">origin_path</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">add_route</span><span class="p">(</span>
                     <span class="n">path</span><span class="o">=</span><span class="n">path_with_prefix</span><span class="p">,</span>
                     <span class="n">endpoint</span><span class="o">=</span><span class="n">route</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span>
                     <span class="n">methods</span><span class="o">=</span><span class="n">route</span><span class="o">.</span><span class="n">methods</span><span class="p">,</span>
                     <span class="n">name</span><span class="o">=</span><span class="n">route</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
                 <span class="p">)</span>
-            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">WebSocketRoute</span><span class="p">):</span>
-                <span class="n">path_with_prefix</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">url_prefix</span> <span class="o">+</span> <span class="n">route</span><span class="o">.</span><span class="n">path</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">APIWebSocketRoute</span><span class="p">):</span>
+                <span class="n">path_with_prefix</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">url_prefix</span> <span class="o">+</span> <span class="n">route</span><span class="o">.</span><span class="n">origin_path</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">add_websocket_route</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path_with_prefix</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="n">route</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">route</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_collect_openapi_info</span><span class="p">(</span>
@@ -2150,6 +2159,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            rule: The URL rule string.</span>
+<span class="sd">            name: The URL name string.</span>
 <span class="sd">            tags: Adds metadata to a single tag.</span>
 <span class="sd">            summary: A short summary of what the operation does.</span>
 <span class="sd">            description: A verbose explanation of the operation behavior.</span>
@@ -2211,6 +2221,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            rule: The URL rule string.</span>
+<span class="sd">            name: The URL name string.</span>
 <span class="sd">            tags: Adds metadata to a single tag.</span>
 <span class="sd">            summary: A short summary of what the operation does.</span>
 <span class="sd">            description: A verbose explanation of the operation behavior.</span>
@@ -2220,6 +2231,7 @@
 <span class="sd">            security: A declaration of which security mechanisms can be used for this operation.</span>
 <span class="sd">            servers: An alternative server array to service this operation.</span>
 <span class="sd">            openapi_extensions: Allows extensions to the OpenAPI Schema.</span>
+<span class="sd">            request_body: Advanced configuration in OpenAPI.</span>
 <span class="sd">            responses: API responses should be either a subclass of BaseModel, a dictionary, or None.</span>
 <span class="sd">            doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">        """</span>
@@ -2273,6 +2285,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            rule: The URL rule string.</span>
+<span class="sd">            name: The URL name string.</span>
 <span class="sd">            tags: Adds metadata to a single tag.</span>
 <span class="sd">            summary: A short summary of what the operation does.</span>
 <span class="sd">            description: A verbose explanation of the operation behavior.</span>
@@ -2282,6 +2295,7 @@
 <span class="sd">            security: A declaration of which security mechanisms can be used for this operation.</span>
 <span class="sd">            servers: An alternative server array to service this operation.</span>
 <span class="sd">            openapi_extensions: Allows extensions to the OpenAPI Schema.</span>
+<span class="sd">            request_body: Advanced configuration in OpenAPI.</span>
 <span class="sd">            responses: API responses should be either a subclass of BaseModel, a dictionary, or None.</span>
 <span class="sd">            doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">        """</span>
@@ -2335,6 +2349,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            rule: The URL rule string.</span>
+<span class="sd">            name: The URL name string.</span>
 <span class="sd">            tags: Adds metadata to a single tag.</span>
 <span class="sd">            summary: A short summary of what the operation does.</span>
 <span class="sd">            description: A verbose explanation of the operation behavior.</span>
@@ -2344,6 +2359,7 @@
 <span class="sd">            security: A declaration of which security mechanisms can be used for this operation.</span>
 <span class="sd">            servers: An alternative server array to service this operation.</span>
 <span class="sd">            openapi_extensions: Allows extensions to the OpenAPI Schema.</span>
+<span class="sd">            request_body: Advanced configuration in OpenAPI.</span>
 <span class="sd">            responses: API responses should be either a subclass of BaseModel, a dictionary, or None.</span>
 <span class="sd">            doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">        """</span>
@@ -2397,6 +2413,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            rule: The URL rule string.</span>
+<span class="sd">            name: The URL name string.</span>
 <span class="sd">            tags: Adds metadata to a single tag.</span>
 <span class="sd">            summary: A short summary of what the operation does.</span>
 <span class="sd">            description: A verbose explanation of the operation behavior.</span>
@@ -2406,6 +2423,7 @@
 <span class="sd">            security: A declaration of which security mechanisms can be used for this operation.</span>
 <span class="sd">            servers: An alternative server array to service this operation.</span>
 <span class="sd">            openapi_extensions: Allows extensions to the OpenAPI Schema.</span>
+<span class="sd">            request_body: Advanced configuration in OpenAPI.</span>
 <span class="sd">            responses: API responses should be either a subclass of BaseModel, a dictionary, or None.</span>
 <span class="sd">            doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">        """</span>
@@ -2978,6 +2996,22 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
           </tr>
           <tr class="doc-section-item">
             <td>
+                <code>name</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The URL name string.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
                 <code>tags</code>
             </td>
             <td>
@@ -3122,6 +3156,22 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
           </tr>
           <tr class="doc-section-item">
             <td>
+                <code>request_body</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="RequestBody (star_openapi.models.RequestBody)" href="../../../Reference/Models/#star_openapi.models.RequestBody">RequestBody</a> | <span title="dict">dict</span>[<span title="str">str</span>, <span title="typing.Any">Any</span>] | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Advanced configuration in OpenAPI.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
                 <code>responses</code>
             </td>
             <td>
@@ -3158,12 +3208,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>star_openapi/openapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">547</span>
-<span class="normal">548</span>
-<span class="normal">549</span>
-<span class="normal">550</span>
-<span class="normal">551</span>
-<span class="normal">552</span>
+              <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">552</span>
 <span class="normal">553</span>
 <span class="normal">554</span>
 <span class="normal">555</span>
@@ -3218,7 +3263,14 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">604</span>
 <span class="normal">605</span>
 <span class="normal">606</span>
-<span class="normal">607</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span>
+<span class="normal">607</span>
+<span class="normal">608</span>
+<span class="normal">609</span>
+<span class="normal">610</span>
+<span class="normal">611</span>
+<span class="normal">612</span>
+<span class="normal">613</span>
+<span class="normal">614</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
@@ -3242,6 +3294,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
 <span class="sd">    Args:</span>
 <span class="sd">        rule: The URL rule string.</span>
+<span class="sd">        name: The URL name string.</span>
 <span class="sd">        tags: Adds metadata to a single tag.</span>
 <span class="sd">        summary: A short summary of what the operation does.</span>
 <span class="sd">        description: A verbose explanation of the operation behavior.</span>
@@ -3251,6 +3304,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="sd">        security: A declaration of which security mechanisms can be used for this operation.</span>
 <span class="sd">        servers: An alternative server array to service this operation.</span>
 <span class="sd">        openapi_extensions: Allows extensions to the OpenAPI Schema.</span>
+<span class="sd">        request_body: Advanced configuration in OpenAPI.</span>
 <span class="sd">        responses: API responses should be either a subclass of BaseModel, a dictionary, or None.</span>
 <span class="sd">        doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">    """</span>
@@ -3325,6 +3379,22 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
             </td>
             <td>
                 <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>name</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The URL name string.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -3567,7 +3637,8 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">418</span>
 <span class="normal">419</span>
 <span class="normal">420</span>
-<span class="normal">421</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span>
+<span class="normal">421</span>
+<span class="normal">422</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
@@ -3590,6 +3661,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
 <span class="sd">    Args:</span>
 <span class="sd">        rule: The URL rule string.</span>
+<span class="sd">        name: The URL name string.</span>
 <span class="sd">        tags: Adds metadata to a single tag.</span>
 <span class="sd">        summary: A short summary of what the operation does.</span>
 <span class="sd">        description: A verbose explanation of the operation behavior.</span>
@@ -3676,6 +3748,22 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
           </tr>
           <tr class="doc-section-item">
             <td>
+                <code>name</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The URL name string.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
                 <code>tags</code>
             </td>
             <td>
@@ -3820,6 +3908,22 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
           </tr>
           <tr class="doc-section-item">
             <td>
+                <code>request_body</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="RequestBody (star_openapi.models.RequestBody)" href="../../../Reference/Models/#star_openapi.models.RequestBody">RequestBody</a> | <span title="dict">dict</span>[<span title="str">str</span>, <span title="typing.Any">Any</span>] | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Advanced configuration in OpenAPI.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
                 <code>responses</code>
             </td>
             <td>
@@ -3856,14 +3960,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>star_openapi/openapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">609</span>
-<span class="normal">610</span>
-<span class="normal">611</span>
-<span class="normal">612</span>
-<span class="normal">613</span>
-<span class="normal">614</span>
-<span class="normal">615</span>
-<span class="normal">616</span>
+              <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">616</span>
 <span class="normal">617</span>
 <span class="normal">618</span>
 <span class="normal">619</span>
@@ -3916,7 +4013,16 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">666</span>
 <span class="normal">667</span>
 <span class="normal">668</span>
-<span class="normal">669</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">patch</span><span class="p">(</span>
+<span class="normal">669</span>
+<span class="normal">670</span>
+<span class="normal">671</span>
+<span class="normal">672</span>
+<span class="normal">673</span>
+<span class="normal">674</span>
+<span class="normal">675</span>
+<span class="normal">676</span>
+<span class="normal">677</span>
+<span class="normal">678</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">patch</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
@@ -3940,6 +4046,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
 <span class="sd">    Args:</span>
 <span class="sd">        rule: The URL rule string.</span>
+<span class="sd">        name: The URL name string.</span>
 <span class="sd">        tags: Adds metadata to a single tag.</span>
 <span class="sd">        summary: A short summary of what the operation does.</span>
 <span class="sd">        description: A verbose explanation of the operation behavior.</span>
@@ -3949,6 +4056,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="sd">        security: A declaration of which security mechanisms can be used for this operation.</span>
 <span class="sd">        servers: An alternative server array to service this operation.</span>
 <span class="sd">        openapi_extensions: Allows extensions to the OpenAPI Schema.</span>
+<span class="sd">        request_body: Advanced configuration in OpenAPI.</span>
 <span class="sd">        responses: API responses should be either a subclass of BaseModel, a dictionary, or None.</span>
 <span class="sd">        doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">    """</span>
@@ -4027,6 +4135,22 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
           </tr>
           <tr class="doc-section-item">
             <td>
+                <code>name</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The URL name string.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
                 <code>tags</code>
             </td>
             <td>
@@ -4171,6 +4295,22 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
           </tr>
           <tr class="doc-section-item">
             <td>
+                <code>request_body</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="RequestBody (star_openapi.models.RequestBody)" href="../../../Reference/Models/#star_openapi.models.RequestBody">RequestBody</a> | <span title="dict">dict</span>[<span title="str">str</span>, <span title="typing.Any">Any</span>] | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Advanced configuration in OpenAPI.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
                 <code>responses</code>
             </td>
             <td>
@@ -4207,8 +4347,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>star_openapi/openapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">423</span>
-<span class="normal">424</span>
+              <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">424</span>
 <span class="normal">425</span>
 <span class="normal">426</span>
 <span class="normal">427</span>
@@ -4267,7 +4406,10 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">480</span>
 <span class="normal">481</span>
 <span class="normal">482</span>
-<span class="normal">483</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span>
+<span class="normal">483</span>
+<span class="normal">484</span>
+<span class="normal">485</span>
+<span class="normal">486</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
@@ -4291,6 +4433,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
 <span class="sd">    Args:</span>
 <span class="sd">        rule: The URL rule string.</span>
+<span class="sd">        name: The URL name string.</span>
 <span class="sd">        tags: Adds metadata to a single tag.</span>
 <span class="sd">        summary: A short summary of what the operation does.</span>
 <span class="sd">        description: A verbose explanation of the operation behavior.</span>
@@ -4300,6 +4443,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="sd">        security: A declaration of which security mechanisms can be used for this operation.</span>
 <span class="sd">        servers: An alternative server array to service this operation.</span>
 <span class="sd">        openapi_extensions: Allows extensions to the OpenAPI Schema.</span>
+<span class="sd">        request_body: Advanced configuration in OpenAPI.</span>
 <span class="sd">        responses: API responses should be either a subclass of BaseModel, a dictionary, or None.</span>
 <span class="sd">        doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">    """</span>
@@ -4378,6 +4522,22 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
           </tr>
           <tr class="doc-section-item">
             <td>
+                <code>name</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The URL name string.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
                 <code>tags</code>
             </td>
             <td>
@@ -4522,6 +4682,22 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
           </tr>
           <tr class="doc-section-item">
             <td>
+                <code>request_body</code>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="RequestBody (star_openapi.models.RequestBody)" href="../../../Reference/Models/#star_openapi.models.RequestBody">RequestBody</a> | <span title="dict">dict</span>[<span title="str">str</span>, <span title="typing.Any">Any</span>] | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Advanced configuration in OpenAPI.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
                 <code>responses</code>
             </td>
             <td>
@@ -4558,10 +4734,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>star_openapi/openapi.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">485</span>
-<span class="normal">486</span>
-<span class="normal">487</span>
-<span class="normal">488</span>
+              <div class="highlight"><table class="highlighttable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">488</span>
 <span class="normal">489</span>
 <span class="normal">490</span>
 <span class="normal">491</span>
@@ -4618,7 +4791,12 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="normal">542</span>
 <span class="normal">543</span>
 <span class="normal">544</span>
-<span class="normal">545</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span>
+<span class="normal">545</span>
+<span class="normal">546</span>
+<span class="normal">547</span>
+<span class="normal">548</span>
+<span class="normal">549</span>
+<span class="normal">550</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
@@ -4642,6 +4820,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
 <span class="sd">    Args:</span>
 <span class="sd">        rule: The URL rule string.</span>
+<span class="sd">        name: The URL name string.</span>
 <span class="sd">        tags: Adds metadata to a single tag.</span>
 <span class="sd">        summary: A short summary of what the operation does.</span>
 <span class="sd">        description: A verbose explanation of the operation behavior.</span>
@@ -4651,6 +4830,7 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 <span class="sd">        security: A declaration of which security mechanisms can be used for this operation.</span>
 <span class="sd">        servers: An alternative server array to service this operation.</span>
 <span class="sd">        openapi_extensions: Allows extensions to the OpenAPI Schema.</span>
+<span class="sd">        request_body: Advanced configuration in OpenAPI.</span>
 <span class="sd">        responses: API responses should be either a subclass of BaseModel, a dictionary, or None.</span>
 <span class="sd">        doc_ui: Declares this operation to be shown. Default to True.</span>
 <span class="sd">    """</span>
@@ -4786,16 +4966,16 @@ More information goto <a href="https://spec.openapis.org/oas/v3.1.0#operation-ob
 
     <span class="c1"># Register the APIRouter with the current instance</span>
     <span class="k">for</span> <span class="n">route</span> <span class="ow">in</span> <span class="n">api</span><span class="o">.</span><span class="n">routes</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">Route</span><span class="p">):</span>
-            <span class="n">path_with_prefix</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">url_prefix</span> <span class="o">+</span> <span class="n">route</span><span class="o">.</span><span class="n">path</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">APIRoute</span><span class="p">):</span>
+            <span class="n">path_with_prefix</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">url_prefix</span> <span class="o">+</span> <span class="n">route</span><span class="o">.</span><span class="n">origin_path</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">add_route</span><span class="p">(</span>
                 <span class="n">path</span><span class="o">=</span><span class="n">path_with_prefix</span><span class="p">,</span>
                 <span class="n">endpoint</span><span class="o">=</span><span class="n">route</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span>
                 <span class="n">methods</span><span class="o">=</span><span class="n">route</span><span class="o">.</span><span class="n">methods</span><span class="p">,</span>
                 <span class="n">name</span><span class="o">=</span><span class="n">route</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
             <span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">WebSocketRoute</span><span class="p">):</span>
-            <span class="n">path_with_prefix</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">url_prefix</span> <span class="o">+</span> <span class="n">route</span><span class="o">.</span><span class="n">path</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="n">APIWebSocketRoute</span><span class="p">):</span>
+            <span class="n">path_with_prefix</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">url_prefix</span> <span class="o">+</span> <span class="n">route</span><span class="o">.</span><span class="n">origin_path</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">add_websocket_route</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path_with_prefix</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="n">route</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">route</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 </code></pre></div></td></tr></tbody></table></div>
             </details>

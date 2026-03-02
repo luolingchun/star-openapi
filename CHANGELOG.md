@@ -1,3 +1,7 @@
+## v0.9.3 2026-03-22
+
+- APIRouter allows no slash suffix by @luolingchun in #7
+
 ## v0.9.2 2026-01-26
 
 - Add parameter app to StarGroup by @luolingchun in #4

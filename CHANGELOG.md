@@ -1,4 +1,8 @@
-## v0.9.3 2026-03-22
+## v0.9.4 2026-03-11
+
+- Add create_websocket_endpoint method compatible with cython build by @luolingchun in #9
+
+## v0.9.3 2026-03-02
 
 - APIRouter allows no slash suffix by @luolingchun in #7
 

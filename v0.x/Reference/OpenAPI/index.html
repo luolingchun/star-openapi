@@ -1816,9 +1816,7 @@
 <span class="normal">689</span>
 <span class="normal">690</span>
 <span class="normal">691</span>
-<span class="normal">692</span>
-<span class="normal">693</span>
-<span class="normal">694</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">OpenAPI</span><span class="p">(</span><span class="n">Starlette</span><span class="p">):</span>
+<span class="normal">692</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">OpenAPI</span><span class="p">(</span><span class="n">Starlette</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -2458,11 +2456,9 @@
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">add_websocket_route</span><span class="p">(</span>
-                <span class="n">rule</span><span class="p">,</span>
-                <span class="n">func</span><span class="p">,</span>
-                <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
-            <span class="p">)</span>
+            <span class="n">endpoint</span> <span class="o">=</span> <span class="n">create_websocket_endpoint</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_websocket_route</span><span class="p">(</span><span class="n">rule</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+
             <span class="k">return</span> <span class="n">func</span>
 
         <span class="k">return</span> <span class="n">decorator</span>

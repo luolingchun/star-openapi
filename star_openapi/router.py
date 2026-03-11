@@ -7,7 +7,7 @@ from starlette.middleware import Middleware
 from starlette.routing import Request, Response, Route, Router, WebSocketRoute
 from starlette.websockets import WebSocket
 
-from .endpoint import create_endpoint
+from .endpoint import create_endpoint, create_websocket_endpoint
 from .models import ExternalDocumentation, RequestBody, Server, Tag
 from .types import ParametersTuple, ResponseDict
 from .utils import (
@@ -580,11 +580,9 @@ class APIRouter(Router):
         name: str | None = None,
     ):
         def decorator(func) -> Callable:
-            self._add_websocket_route(
-                rule,
-                func,
-                name=name,
-            )
+            endpoint = create_websocket_endpoint(func)
+            self._add_websocket_route(rule, endpoint, name=name)
+
             return func
 
         return decorator

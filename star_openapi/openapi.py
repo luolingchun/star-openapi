@@ -13,7 +13,7 @@ from starlette.routing import Mount, Route
 
 from .cli import cli
 from .config import Config
-from .endpoint import create_endpoint
+from .endpoint import create_endpoint, create_websocket_endpoint
 from .models import (
     OPENAPI3_REF_PREFIX,
     Components,
@@ -684,11 +684,9 @@ class OpenAPI(Starlette):
         name: str | None = None,
     ):
         def decorator(func) -> Callable:
-            self.add_websocket_route(
-                rule,
-                func,
-                name=name,
-            )
+            endpoint = create_websocket_endpoint(func)
+            self.add_websocket_route(rule, endpoint, name=name)
+
             return func
 
         return decorator

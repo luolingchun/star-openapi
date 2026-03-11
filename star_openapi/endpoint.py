@@ -5,6 +5,7 @@ from typing import Any, Type
 from pydantic import BaseModel
 from starlette.requests import Request
 from starlette.responses import Response
+from starlette.websockets import WebSocket
 
 from .request import _validate_request
 
@@ -35,5 +36,13 @@ def create_endpoint(
             return await func(**kwargs)
         else:
             return func(**kwargs)
+
+    return endpoint
+
+
+def create_websocket_endpoint(func):
+    @wraps(func)
+    async def endpoint(websocket: WebSocket):
+        return await func(websocket)
 
     return endpoint

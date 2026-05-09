@@ -1,5 +1,6 @@
 import inspect
 import json
+import posixpath
 import re
 from http import HTTPMethod, HTTPStatus
 from typing import Any, Callable, DefaultDict, Type, get_type_hints
@@ -460,13 +461,10 @@ def make_validation_error_response(_request: Request, e: ValidationError) -> JSO
 
 
 def parse_rule(rule: str, url_prefix=None) -> str:
-    trail_slash = rule.endswith("/")
-
-    # Merge url_prefix and uri
-    uri = url_prefix.rstrip("/") + "/" + rule.lstrip("/") if url_prefix else rule
-
-    if not trail_slash:
-        uri = uri.rstrip("/")
+    if rule:
+        uri = posixpath.join(url_prefix, rule.lstrip("/")) if url_prefix else rule
+    else:
+        uri = url_prefix or ""
 
     return uri
 

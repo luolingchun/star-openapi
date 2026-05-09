@@ -1,3 +1,7 @@
+## v0.9.5 2026-05-09
+
+- Fix trail slash in `parse_rule` by @luolingchun in #11
+
 ## v0.9.4 2026-03-11
 
 - Add create_websocket_endpoint method compatible with cython build by @luolingchun in #9

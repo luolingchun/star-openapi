@@ -58,12 +58,8 @@ ty = ["ty"]
 ruff = ["ruff"]
 test = ["pytest", "httpx"]
 doc = [
-    "mkdocs-static-i18n>=1.0",
+    "zensical",
     "mkdocstrings[python]",
-    "mkdocs-material",
-    "mkdocs-glightbox",
-    "pyyaml",
-    "mike",
 ]
 dev = [
     "itsdangerous",

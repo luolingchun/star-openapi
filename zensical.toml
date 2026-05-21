@@ -1,0 +1,96 @@
+[project]
+site_name = "star-openapi"
+site_url = "https://luolingchun.github.io/star-openapi/"
+site_description = "A simple API framework based on Starlette."
+site_author = "llc"
+copyright = "MIT"
+
+docs_dir = "docs"
+site_dir = "site"
+use_directory_urls = true
+
+repo_url = "https://github.com/luolingchun/star-openapi"
+repo_name = "GitHub"
+edit_uri = "edit/main/docs"
+
+nav = [
+    { "Home" = "index.md" },
+    { "Quickstart" = "Quickstart.md" },
+    { "Usage" = [
+        { "Specification" = "Usage/Specification.md" },
+        { "Request" = "Usage/Request.md" },
+        { "Response" = "Usage/Response.md" },
+        { "Route Operation" = "Usage/Route_Operation.md" },
+        { "Configuration" = "Usage/Configuration.md" },
+        { "UI Templates" = "Usage/UI_Templates.md" },
+        { "CLI" = "Usage/CLI.md" },
+    ] },
+    { "Example" = "Example.md" },
+    { "API Reference" = [
+        { "OpenAPI" = "Reference/OpenAPI.md" },
+        { "APIRouter" = "Reference/APIRouter.md" },
+        { "Models" = "Reference/Models.md" },
+    ] },
+    { "LICENSE" = "LICENSE.md" },
+    { "Changelog" = "Changelog.md" },
+    { "Contributing" = "Contributing.md" },
+]
+
+[project.theme]
+variant = "modern"
+language = "en"
+logo = "images/logo-blue.svg"
+favicon = "images/logo-blue.svg"
+
+features = [
+    "navigation.tabs",
+    "navigation.instant",
+    "navigation.instant.prefetch",
+    "navigation.tracking",
+    "navigation.footer",
+    "navigation.top",
+    "navigation.path",
+    "search.highlight",
+    "content.code.copy",
+    "content.code.select",
+    "content.action.edit",
+    "content.action.view",
+    "toc.follow",
+]
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+toggle = { icon = "material/weather-sunny" }
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+toggle = { icon = "material/weather-night" }
+
+[project.markdown_extensions.admonition]
+
+[project.markdown_extensions.toc]
+permalink = "⚓︎"
+
+[project.markdown_extensions.md_in_html]
+
+[project.markdown_extensions."pymdownx.magiclink"]
+
+[project.markdown_extensions."pymdownx.superfences"]
+
+[project.markdown_extensions."pymdownx.snippets"]
+
+[project.markdown_extensions."pymdownx.highlight"]
+linenums = true
+
+
+[project.plugins.mkdocstrings]
+enable_inventory = true
+
+[project.plugins.mkdocstrings.handlers.python]
+show_root_heading = true
+show_root_full_path = false
+show_source = true
+
+[project.markdown_extensions.zensical.extensions.glightbox]

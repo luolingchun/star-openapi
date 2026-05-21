@@ -76,7 +76,7 @@ class APIRouter(Router):
         operation_id_callback: Callable = get_operation_id_for_path,
         responses: ResponseDict | None = None,
         doc_ui: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ):
         """
         Based on Router

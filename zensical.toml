@@ -88,7 +88,9 @@ linenums = true
 [project.plugins.mkdocstrings]
 enable_inventory = true
 
-[project.plugins.mkdocstrings.handlers.python]
+[project.plugins.mkdocstrings.handlers.python.options]
+show_root_heading = true
+show_root_full_path = false
 show_source = true
 
 [project.markdown_extensions.zensical.extensions.glightbox]

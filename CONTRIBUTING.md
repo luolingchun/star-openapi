@@ -35,9 +35,9 @@ Before submitting pr, you need to complete the following steps:
 
 5. Building the docs
 
-   Serve the live docs with [Material for MkDocs](https://github.com/squidfunk/mkdocs-material), and make sure it's
+   Serve the live docs with [Zensical](https://github.com/zensical/zensical), and make sure it's
    correct.
 
     ```bash
-    mkdocs serve
+    zensical serve
     ```

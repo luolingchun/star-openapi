@@ -1,3 +1,7 @@
+## v0.9.6 2026-06-27
+
+- Fix with starlette > 1 by @luolingchun in #13
+
 ## v0.9.5 2026-05-09
 
 - Fix trail slash in `parse_rule` by @luolingchun in #11

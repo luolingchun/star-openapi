@@ -1,4 +1,4 @@
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
 from http import HTTPMethod
 from importlib import import_module
 from importlib.metadata import entry_points
@@ -10,6 +10,7 @@ from pydantic import BaseModel, ValidationError
 from starlette.applications import Starlette
 from starlette.responses import HTMLResponse, JSONResponse
 from starlette.routing import Mount, Route
+from starlette.websockets import WebSocket
 
 from .cli import cli
 from .config import Config
@@ -61,7 +62,7 @@ class OpenAPI(Starlette):
         doc_ui: bool = True,
         doc_prefix: str = "/openapi",
         doc_url: str = "/openapi.json",
-        **kwargs,
+        **kwargs: Any,
     ):
         """
         OpenAPI class that provides REST API functionality along with Swagger UI and Redoc, etc.
@@ -359,6 +360,20 @@ class OpenAPI(Starlette):
             )
         else:
             return parse_parameters(func, doc_ui=False)
+
+    def _add_websocket_route(
+        self,
+        path: str,
+        endpoint: Callable[[WebSocket], Awaitable[None]],
+        name: str | None = None,
+    ) -> None:
+        if not path.startswith("/"):
+            origin_path = path
+            path = "/" + path
+        else:
+            origin_path = path
+        route = APIWebSocketRoute(path=path, origin_path=origin_path, endpoint=endpoint, name=name)
+        self.routes.append(route)
 
     def get(
         self,
@@ -685,7 +700,7 @@ class OpenAPI(Starlette):
     ):
         def decorator(func) -> Callable:
             endpoint = create_websocket_endpoint(func)
-            self.add_websocket_route(rule, endpoint, name=name)
+            self._add_websocket_route(rule, endpoint, name=name)
 
             return func
 

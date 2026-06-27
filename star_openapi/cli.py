@@ -431,7 +431,7 @@ def run_command(
         ssl_cert_reqs=ssl_cert_reqs,
         ssl_ca_certs=ssl_ca_certs,
         ssl_ciphers=ssl_ciphers,
-        headers=[header.split(":", 1) for header in headers],  # type: ignore[misc]
+        headers=[header.split(":", 1) for header in headers],  # type: ignore
         use_colors=use_colors,
         factory=factory,
         app_dir=app_dir,

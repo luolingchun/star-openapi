@@ -53,13 +53,9 @@ def get_operation(
     doc = inspect.getdoc(func) or ""
     doc = doc.strip()
     lines = doc.split("\n")
-    doc_summary = lines[0]
 
-    # Determine the summary and description based on provided arguments or docstring
-    if summary is None:
-        doc_description = lines[0] if len(lines) == 0 else "<br/>".join(lines[1:])
-    else:
-        doc_description = "<br/>".join(lines)
+    doc_summary = lines[0]
+    doc_description = "<br/>".join(lines) if summary else "<br/>".join(lines[1:])
 
     summary = summary or doc_summary
     description = description or doc_description
@@ -77,7 +73,7 @@ def get_operation(
     operation_dict.update(openapi_extensions or {})
 
     # Create and return the Operation object
-    operation = Operation(**operation_dict)
+    operation = Operation.model_validate(operation_dict)
 
     return operation
 

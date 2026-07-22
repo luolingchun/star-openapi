@@ -1,3 +1,4 @@
+import inspect
 from functools import wraps
 from inspect import iscoroutinefunction
 from typing import Any, Type
@@ -30,7 +31,7 @@ def create_endpoint(
             form=form,
             body=body,
         )
-        if "request" in func.__code__.co_varnames:
+        if "request" in inspect.signature(func).parameters:
             kwargs["request"] = request
         if iscoroutinefunction(func):
             return await func(**kwargs)

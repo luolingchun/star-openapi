@@ -1,3 +1,7 @@
+## v0.9.7 2026-08-01
+
+- Add test with openapi-spec-validator by @luolingchun in #22
+
 ## v0.9.6 2026-06-27
 
 - Fix with starlette > 1 by @luolingchun in #13

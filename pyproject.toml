@@ -56,7 +56,7 @@ elements = ["star-openapi-elements"]
 [dependency-groups]
 ty = ["ty"]
 ruff = ["ruff"]
-test = ["pytest", "httpx"]
+test = ["pytest", "httpx", "openapi-spec-validator"]
 doc = [
     "zensical",
     "mkdocstrings[python]",

@@ -1,3 +1,4 @@
+from openapi_spec_validator import validate
 from pydantic import BaseModel
 from starlette.testclient import TestClient
 
@@ -76,3 +77,5 @@ def test_openapi():
     response = client.get("/openapi/openapi.json")
     assert response.status_code == 200
     client.get("/openapi/openapi.json")
+    _json = response.json()
+    validate(_json)

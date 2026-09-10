@@ -59,7 +59,7 @@ async def _validate_header(request: Request, header: Type[BaseModel]):
         if value is not None:
             header_dict[key] = value
         if model_field_schema.get("type") == "null":
-            header_dict[key] = value
+            header_dict[key] = value or None
     # extra keys
     for key, value in request_headers.items():
         if key not in header_dict.keys():
@@ -92,7 +92,7 @@ async def _validate_query(request: Request, query: Type[BaseModel]):
         if value is not None and value != []:
             query_dict[key] = value
         if model_field_schema.get("type") == "null":
-            query_dict[key] = value
+            query_dict[key] = value or None
     # extra keys
     for key, value in query_params.items():
         if key not in query_dict.keys():
@@ -107,8 +107,7 @@ async def _validate_form(request: Request, form: Type[BaseModel]):
     for model_field_key, model_field_value in form.model_fields.items():
         model_field_schema = model_properties.get(model_field_value.alias or model_field_key)
         if model_field_schema.get("type") == "array":
-            if model_field_schema.get("items") == {"format": "binary", "type": "string"}:
-                # list[UploadFile]
+            if model_field_schema.get("items").get("type") == "string":
                 key, value = _get_list_value(form, request_form, model_field_key, model_field_value)
             else:
                 value = []
@@ -118,8 +117,7 @@ async def _validate_form(request: Request, form: Type[BaseModel]):
                         value.append(json.loads(_value))
                     except (JSONDecodeError, TypeError):
                         value.append(_value)
-        elif model_field_schema.get("type") == "string" and model_field_schema.get("format") == "binary":
-            # UploadFile
+        elif model_field_schema.get("type") == "string":
             key, value = _get_value(form, request_form, model_field_key, model_field_value)
         else:
             key, _value = _get_value(form, request_form, model_field_key, model_field_value)
@@ -130,9 +128,9 @@ async def _validate_form(request: Request, form: Type[BaseModel]):
         if value is not None and value != []:
             form_dict[key] = value
         if model_field_schema.get("type") == "null":
-            form_dict[key] = value
+            form_dict[key] = value or None
     # extra keys
-    for key, value in {**dict(request_form), **dict(request_form)}.items():
+    for key, value in request_form.items():
         if key not in form_dict.keys():
             form_dict[key] = value
     return form.model_validate(obj=form_dict)

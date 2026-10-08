@@ -11,7 +11,7 @@ from .xml import XML
 
 class Schema(BaseModel):
     """
-    https://spec.openapis.org/oas/v3.1.0#schema-object
+    https://spec.openapis.org/oas/v3.2.0#schema-object
     """
 
     ref: str | None = Field(alias="$ref", default=None)
@@ -50,6 +50,7 @@ class Schema(BaseModel):
     xml: XML | None = None
     externalDocs: ExternalDocumentation | None = None
     example: Any | None = None
+    examples: Any | None = None
     deprecated: bool | None = None
     const: Any | None = None
 

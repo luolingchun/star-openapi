@@ -68,7 +68,7 @@ def get_book(path: BookPath, query: BookBody):
 Allows referencing an external resource for extended documentation.
 
 More information to
-see [External Documentation Object](https://spec.openapis.org/oas/v3.1.0#external-documentation-object).
+see [External Documentation Object](https://spec.openapis.org/oas/v3.2.0#external-documentation-object).
 
 ```python hl_lines="10"
 from star_openapi import OpenAPI, ExternalDocumentation
@@ -238,7 +238,7 @@ async def get_book(path: BookPath):
 
 While the OpenAPI Specification tries to accommodate most use cases,
 additional data can be added to extend the specification at certain points.
-See [Specification Extensions](https://spec.openapis.org/oas/v3.1.0#specification-extensions).
+See [Specification Extensions](https://spec.openapis.org/oas/v3.2.0#specification-extensions).
 
 ```python  hl_lines="3 12 19 28 42"
 from star_openapi import OpenAPI, APIRouter

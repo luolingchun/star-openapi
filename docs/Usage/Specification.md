@@ -7,10 +7,10 @@ If you need the complete Specification, go to http://127.0.0.1:8000/openapi/open
 **`star-openapi`**
 provide [Swagger UI](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc), [RapiDoc](https://github.com/rapi-doc/RapiDoc), [RapiPdf](https://mrin9.github.io/RapiPdf/), [Scalar](https://github.com/scalar/scalar)
 and [Elements](https://github.com/stoplightio/elements) interactive documentation.
-Before that, you should know something about the [OpenAPI Specification](https://spec.openapis.org/oas/v3.1.0).
+Before that, you should know something about the [OpenAPI Specification](https://spec.openapis.org/oas/v3.2.0).
 
 You can use a dictionary to provide the info parameters: **`title`**, **`version`**... , more information sees
-the [OpenAPI Specification Info Object](https://spec.openapis.org/oas/v3.1.0#info-object).
+the [OpenAPI Specification Info Object](https://spec.openapis.org/oas/v3.2.0#info-object).
 
 ```python hl_lines="4 5"
 from star_openapi import OpenAPI
@@ -33,7 +33,7 @@ run it, and go to http://127.0.0.1:8000/openapi, you will see the documentation.
 
 There are some examples for Security Scheme Object,
 more features see
-the [OpenAPI Specification Security Scheme Object](https://spec.openapis.org/oas/v3.1.0#security-scheme-object).
+the [OpenAPI Specification Security Scheme Object](https://spec.openapis.org/oas/v3.2.0#security-scheme-object).
 
 ```python
 # Basic Authentication Sample
@@ -139,7 +139,7 @@ app = OpenAPI(info=info, servers=servers)
 Allows referencing an external resource for extended documentation.
 
 More information to
-see [External Documentation Object](https://spec.openapis.org/oas/v3.1.0#external-documentation-object).
+see [External Documentation Object](https://spec.openapis.org/oas/v3.2.0#external-documentation-object).
 
 ```python
 from star_openapi import OpenAPI, ExternalDocumentation
@@ -155,7 +155,7 @@ app = OpenAPI(info=info, external_docs=external_docs)
 
 While the OpenAPI Specification tries to accommodate most use cases,
 additional data can be added to extend the specification at certain points.
-See [Specification Extensions](https://spec.openapis.org/oas/v3.1.0#specification-extensions).
+See [Specification Extensions](https://spec.openapis.org/oas/v3.2.0#specification-extensions).
 
 It can also be available in every api, goto [Operation](Route_Operation.md#openapi_extensions).
 

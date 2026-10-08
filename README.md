@@ -29,7 +29,7 @@ The key features are:
 
 - **Easy to code:** Easy to use and easy to learn
 
-- **Standard document specification:** Based on [OpenAPI Specification](https://spec.openapis.org/oas/v3.1.0)
+- **Standard document specification:** Based on [OpenAPI Specification](https://spec.openapis.org/oas/v3.2.0)
 
 - **Interactive OpenAPI documentation:**
   [Swagger](https://github.com/swagger-api/swagger-ui), [Redoc](https://github.com/Redocly/redoc), [RapiDoc](https://github.com/rapi-doc/RapiDoc), [RapiPdf](https://mrin9.github.io/RapiPdf/), [Scalar](https://github.com/scalar/scalar), [Elements](https://github.com/stoplightio/elements)

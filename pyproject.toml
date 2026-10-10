@@ -37,6 +37,9 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/luolingchun/star-openapi"
 Documentation = "https://luolingchun.github.io/star-openapi"
+Repository = "https://github.com/luolingchun/star-openapi"
+Issues = "https://github.com/luolingchun/star-openapi/issues"
+Changelog = "https://luolingchun.github.io/star-openapi/Changelog/"
 
 [project.optional-dependencies]
 full = [

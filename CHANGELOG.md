@@ -1,3 +1,7 @@
+## v0.9.8 2026-10-10
+
+- Fix non-strict value in form by @luolingchun in #25
+
 ## v0.9.7 2026-08-01
 
 - Add test with openapi-spec-validator by @luolingchun in #22

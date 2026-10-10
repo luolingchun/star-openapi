@@ -134,7 +134,9 @@ def parse_header(header: Type[BaseModel]) -> tuple[list[Parameter], dict]:
             data["deprecated"] = value.get("deprecated")
         if "example" in value.keys():
             data["example"] = value.get("example")
-        if "examples" in value.keys():
+        # JSON Schema `examples` is a list and stays in the parameter's schema;
+        # only an OpenAPI map of Example objects belongs on the parameter
+        if isinstance(value.get("examples"), dict):
             data["examples"] = value.get("examples")
         parameters.append(Parameter.model_validate(data))
 
@@ -167,7 +169,9 @@ def parse_cookie(cookie: Type[BaseModel]) -> tuple[list[Parameter], dict]:
             data["deprecated"] = value.get("deprecated")
         if "example" in value.keys():
             data["example"] = value.get("example")
-        if "examples" in value.keys():
+        # JSON Schema `examples` is a list and stays in the parameter's schema;
+        # only an OpenAPI map of Example objects belongs on the parameter
+        if isinstance(value.get("examples"), dict):
             data["examples"] = value.get("examples")
         parameters.append(Parameter.model_validate(data))
 
@@ -195,7 +199,9 @@ def parse_path(path: Type[BaseModel]) -> tuple[list[Parameter], dict]:
             data["deprecated"] = value.get("deprecated")
         if "example" in value.keys():
             data["example"] = value.get("example")
-        if "examples" in value.keys():
+        # JSON Schema `examples` is a list and stays in the parameter's schema;
+        # only an OpenAPI map of Example objects belongs on the parameter
+        if isinstance(value.get("examples"), dict):
             data["examples"] = value.get("examples")
         parameters.append(Parameter.model_validate(data))
 
@@ -228,7 +234,9 @@ def parse_query(query: Type[BaseModel]) -> tuple[list[Parameter], dict]:
             data["deprecated"] = value.get("deprecated")
         if "example" in value.keys():
             data["example"] = value.get("example")
-        if "examples" in value.keys():
+        # JSON Schema `examples` is a list and stays in the parameter's schema;
+        # only an OpenAPI map of Example objects belongs on the parameter
+        if isinstance(value.get("examples"), dict):
             data["examples"] = value.get("examples")
         parameters.append(Parameter.model_validate(data))
 
